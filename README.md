@@ -48,29 +48,17 @@ See https://openbioml.org, especially [our approach and partners](https://openbi
 
 # Installation and set-up
 
-Create a new conda environment with Python 3.8:
+Create a new conda environment with Python 3.11:
 
 ```bash
-conda create -n chemnlp python=3.8
+conda create -n chemnlp python=3.11
 conda activate chemnlp
-```
-
-To install the `chemnlp` package (and required dependencies):
-
-```bash
-pip install chemnlp
 ```
 
 If working on developing the python package:
 
 ```bash
-pip install -e "chemnlp[dev]"  # to install development dependencies
-```
-
-When working on the cluster it's important we conserve memory and reduce duplication. Therefore, it is recommended to also pin your Hugging Face cache directory to a shared folder on the cluster by running the command below (or adding it to your ~/.bashrc startup script). There is also a helper script at `experiments/scripts/transfer_hf_cache.sh` which will transfer any existing cache from certain folders to the shared directory;
-
-```bash
-export HF_HOME="/fsx/proj-chemnlp/hf_cache"
+pip install -e .
 ```
 
 If extra dependencies are required (e.g. for dataset creation) but are not needed for the main package please add to the `pyproject.toml` in the `dataset_creation` variable and ensure this is reflected in the `conda.yml` file.

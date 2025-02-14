@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "chemnlp"
 description = "Open source chemistry dataset & LLM"
 readme = "README.md"
-requires-python = "==3.9.*"
+requires-python = "==3.11.*"
 dependencies = ["pandas", "pydantic", "pydantic_yaml<=0.11.2", "fire", "loguru"]
 dynamic = ["version"]
 
