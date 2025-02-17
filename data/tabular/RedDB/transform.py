@@ -14,6 +14,14 @@ def is_valid_smiles(smiles: str) -> bool:
         return False
     return True
 
+def canonicalize_smiles(smiles: str) -> str:
+    """
+    Return the canonical SMILES string.
+    """
+
+    mol = Chem.MolFromSmiles(smiles)
+    return Chem.MolToSmiles(mol)
+
 
 def read_dataset():
     # hf_data = pd.read_csv(
@@ -23,6 +31,8 @@ def read_dataset():
         repo_id="chemNLP/RedDB", filename="RedDBv2.csv", repo_type="dataset"
     )
     hf_data = pd.read_csv(file)
+    # apply canonical smiles
+    hf_data["SMILES"] = hf_data.SMILES.apply(canonicalize_smiles)
     assert hf_data.SMILES.apply(is_valid_smiles).to_list() == [True] * len(hf_data)
     assert not hf_data.duplicated().sum()
 
