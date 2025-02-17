@@ -6,7 +6,7 @@ description: |-
 targets:
   - id: toxicity_SR-MMP
     description: whether it shows activity in the SR-MMP assay (1) or not (0)
-    units:
+    units: null
     type: boolean
     names:
       - noun: SR-MMP toxicity
@@ -19,7 +19,7 @@ targets:
       - adjective: toxic in the SR-Mitochondrial membrane potential assay
       - adjective: toxic in the Mitochondrial membrane potential assay
       - gerund: showing SR-MMP toxicity
-    uris:
+    uris: null
 benchmarks:
   - name: TDC
     link: https://tdcommons.ai/
@@ -118,18 +118,4 @@ templates:
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2%aA1} without using any {#other|additional!} words.
     Options:
     {toxicity_SR-MMP%}
-    Answer:<EOI>{%multiple_choice_result}
-  - |-
-    Task: Please answer the multiple choice question.
-    Question: Which molecules are {toxicity_SR-MMP#not &NULL}{toxicity_SR-MMP__names__adjective}?
-    Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
-    Options:
-    {SMILES%toxicity_SR-MMP%}
-    Answer: {%multiple_choice_result}
-  - |-
-    Task: Please answer the multiple choice question.
-    Question: Which molecules are {toxicity_SR-MMP#not &NULL}{toxicity_SR-MMP__names__adjective}?
-    Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
-    Options:
-    {SMILES%toxicity_SR-MMP%}
     Answer:<EOI>{%multiple_choice_result}
