@@ -7,7 +7,7 @@ name = "chemnlp"
 description = "Open source chemistry dataset & LLM"
 readme = "README.md"
 requires-python = "==3.11.*"
-dependencies = ["pandas", "pydantic", "pydantic_yaml<=0.11.2", "fire", "loguru"]
+dependencies = ["pandas", "pydantic", "pydantic_yaml<=0.11.2", "fire", "loguru", "datasets", "rdkit", "transformers"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
