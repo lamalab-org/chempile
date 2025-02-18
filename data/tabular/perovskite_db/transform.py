@@ -1,6 +1,7 @@
 import ast
 
-from datasets import load_dataset
+import pandas as pd
+from huggingface_hub import hf_hub_download
 
 
 def oxford_comma_join(list_of_str):
@@ -13,7 +14,8 @@ def oxford_comma_join(list_of_str):
 
 
 def preprocess():
-    df = load_dataset("kjappelbaum/pervoskite_db", delimiter="|")["train"].to_pandas()
+    df = hf_hub_download("kjappelbaum/pervoskite_db", "perovskite_solar_cells_with_descriptions.csv", repo_type="dataset")
+    df = pd.read_csv(df, delimiter="|")
     df.dropna(
         subset=[
             "device_stack",
