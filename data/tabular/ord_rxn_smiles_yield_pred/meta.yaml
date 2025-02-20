@@ -50,3 +50,8 @@ templates:
   - |-
     Question: {#What is|What's|What is the|What's the!} {yield__names__noun} of a reaction with the {RXNSMILES__names__noun} {RXNSMILES#}?
     Answer: {yield#}{yield__units}.
+  - |-
+    Task: {#Predict|Estimate|Calculate|Determine!} the {yield__names__noun} of a reaction with the {RXNSMILES__names__noun} {RXNSMILES#}.
+    Solution: {yield#}{yield__units}.
+  - |-
+    The {#reaction|chemical reaction!} with the {RXNSMILES__names__noun} {RXNSMILES#} has a {yield__names__noun} of {yield#}{yield__units}.
