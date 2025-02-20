@@ -7,7 +7,7 @@ name = "chemnlp"
 description = "Open source chemistry dataset & LLM"
 readme = "README.md"
 requires-python = "==3.11.*"
-dependencies = ["pandas", "pydantic", "pydantic_yaml<=0.11.2", "fire", "loguru", "datasets", "rdkit", "transformers"]
+dependencies = ["pandas", "pydantic", "pydantic_yaml<=0.11.2", "fire", "loguru", "datasets", "rdkit", "transformers","PyTDC"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
@@ -22,6 +22,7 @@ dataset_creation = [
   "bioc",
   "pylatexenc",
   "canonicalize_psmiles@git+https://github.com/Ramprasad-Group/canonicalize_psmiles.git",
+  "chemcaption@git+https://github.com/lamalab-org/chem-caption.git
   "rxn-chem-utils",
   "backoff",
   "givemeconformer",
