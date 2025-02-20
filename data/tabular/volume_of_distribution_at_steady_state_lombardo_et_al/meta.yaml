@@ -15,26 +15,26 @@ targets:
     uris:
       - http://ncicb.nci.nih.gov/xml/owl/EVS/Thesaurus.owl#C85538
 benchmarks:
-  - name: TDC
-    link: https://tdcommons.ai/
-    split_column: split
+- name: TDC
+  link: https://tdcommons.ai/
+  split_column: split
 identifiers:
-  - id: SMILES
-    type: SMILES
-    description: SMILES
-  - id: compound_name
-    type: Other
-    names:
-      - noun: compound name
-      - noun: drug name
-      - noun: generic drug name
-    description: mix of drug name and ids
+- id: SMILES
+  type: SMILES
+  description: SMILES
+- id: compound_name
+  type: Other
+  names:
+  - noun: compound name
+  - noun: drug name
+  - noun: generic drug name
+  description: mix of drug name and ids
 license: CC BY 4.0
 links:
-  - url: https://doi.org/10.1021/acs.jcim.6b00044
-    description: corresponding publication
-  - url: https://tdcommons.ai/single_pred_tasks/adme/#vdss-volumn-of-distribution-at-steady-state-lombardo-et-al
-    description: data source
+- url: https://doi.org/10.1021/acs.jcim.6b00044
+  description: corresponding publication
+- url: https://tdcommons.ai/single_pred_tasks/adme/#vdss-volumn-of-distribution-at-steady-state-lombardo-et-al
+  description: data source
 num_points: 1130
 bibtex:
   - |-
@@ -51,3 +51,66 @@ bibtex:
     title = {In Silico Prediction of Volume of Distribution in Humans. Extensive Data Set and the
     Exploration of Linear and Nonlinear Methods Coupled with Molecular Interaction Fields Descriptors},
     journal = {Journal of Chemical Information and Modeling}
+templates:
+  - The compound with the {compound_name__names__noun} {compound_name#} has a volume of distribution at steady state (VDss) of {VDss_Lombardo#} {VDss_Lombardo__units}.
+  - The compound with the {compound_name__names__noun} {compound_name#} and the SMILES {SMILES#} has a volume of distribution at steady state (VDss) of {VDss_Lombardo#} {VDss_Lombardo__units}.
+  - |-
+    User: I want to predict the volume of distribution at steady state (VDss) of a compound with the SMILES {SMILES#}.
+    Assistant: The compound with the SMILES {SMILES#} has a volume of distribution at steady state (VDss) of {VDss_Lombardo#} {VDss_Lombardo__units}.
+  - |-
+    User: I want to predict the volume of distribution at steady state (VDss) of a compound with the {compound_name__names__noun} {compound_name#}.
+    Assistant: The compound with the {compound_name__names__noun} {compound_name#} has a volume of distribution at steady state (VDss) of {VDss_Lombardo#} {VDss_Lombardo__units}.
+  - |-
+    Task: Answer multiple choice question.
+    Question: Which compound has the {VDss_Lombardo__names__noun} of {VDss_Lombardo#} {VDss_Lombardo__units}?
+    Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2%aA1} without using any {#other|additional!} words.
+    Options: {SMILES%}
+    Answer: {%multiple_choice_result}
+  - |-
+    Task: You got this! Answer the multiple choice question.
+    Question: Which compound has the {VDss_Lombardo__names__noun} {VDss_Lombardo#} of {VDss_Lombardo__units}?
+    Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%4%aA1} without using any {#other|additional!} words.
+    Options: {compound_name%}
+    Answer: {%multiple_choice_result}
+  - "For the compound identified as {compound_name__names__noun} {compound_name#}, its steady state volume of distribution (VDss) is {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - "The {compound_name__names__noun} {compound_name#} demonstrates a VDss of {VDss_Lombardo#} {VDss_Lombardo__units} at steady state."
+  - "At steady state, the compound, known by its {compound_name__names__noun} {compound_name#}, achieves a volume of distribution (VDss) of {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - "Compound {compound_name__names__noun} {compound_name#}, represented by the SMILES {SMILES#}, exhibits a steady state VDss of {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - "With the identifier {compound_name__names__noun} {compound_name#} and SMILES {SMILES#}, this compound’s VDss at steady state is {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - "The compound having {compound_name__names__noun} {compound_name#} and SMILES {SMILES#} is characterized by a volume of distribution at steady state (VDss) of {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - |-
+    User: "Predict the VDss for a compound given its SMILES {SMILES#}."
+    Assistant: "The compound represented by SMILES {SMILES#} has a steady state volume of distribution (VDss) of {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - |-
+    User: "What is the VDss for the compound with SMILES {SMILES#}?"
+    Assistant: "Based on the SMILES {SMILES#}, the compound exhibits a volume of distribution at steady state of {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - |-
+    User: "Predict the VDss for the compound known as {compound_name__names__noun} {compound_name#}."
+    Assistant: "The {compound_name__names__noun} {compound_name#} shows a volume of distribution at steady state (VDss) of {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - |-  
+    User: "Can you determine the VDss for the compound identified by {compound_name__names__noun} {compound_name#}?"
+    Assistant: "For the compound designated as {compound_name__names__noun} {compound_name#}, the steady state volume of distribution (VDss) is {VDss_Lombardo#} {VDss_Lombardo__units}."
+  - |-
+    Task: "Answer the following multiple choice question."
+    Question: "Identify the compound with a {VDss_Lombardo__names__noun} equal to {VDss_Lombardo#} {VDss_Lombardo__units}."
+    Constraint: "Select either {%multiple_choice_enum%2%aA1} even if unsure, without adding extra words."
+    Options: "{SMILES%}"
+    Answer: "{%multiple_choice_result}"
+  - |-
+    Task: "Complete the multiple choice question."
+    Question: "Which compound exhibits a {VDss_Lombardo__names__noun} of {VDss_Lombardo#} {VDss_Lombardo__units}?"
+    Constraint: "Even if uncertain, choose one of {%multiple_choice_enum%2%aA1} and nothing more."
+    Options: "{SMILES%}"
+    Answer: "{%multiple_choice_result}"
+  - |-
+    Task: "Answer this multiple choice question."
+    Question: "Which compound is characterized by a {VDss_Lombardo__names__noun} of {VDss_Lombardo#} {VDss_Lombardo__units}?"
+    Constraint: "Regardless of certainty, select either {%multiple_choice_enum%4%aA1} without extra words."
+    Options: "{compound_name%}"
+    Answer: "{%multiple_choice_result}"
+  - |-
+    Task: "Please answer the multiple choice query below."
+    Question: "Identify the compound with a {VDss_Lombardo__names__noun} measuring {VDss_Lombardo#} {VDss_Lombardo__units}."
+    Constraint: "Even if not completely sure, choose one of {%multiple_choice_enum%4%aA1} and no additional text."
+    Options: "{compound_name%}"
+    Answer: "{%multiple_choice_result}"
