@@ -43,4 +43,18 @@ templates:
   - |-
     Task: {#Predict|Identify!} the organism in which {#the below|this!} {#protein|amino acid sequence|AA sequence|polypeptide!} can be found.
     {#Amino acid sequence|Sequence|AA sequence!}: {other#}
-    Result:<EOI>{organisms#}
+    Result: {organisms#}
+  - |-
+    Task: Please answer the multiple choice question.
+    Question: In which of these organisms can the protein with the {#amino acid sequence|AA sequence!} {other#} be found in?
+    Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {organisms%}
+    Answer: {%multiple_choice_result}
+  - |-
+    Task: Please answer the multiple choice question.
+    Question: Which {#amino acid sequence|AA sequence!} can be found in the organism {organisms#}?
+    Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional|extra!} words.
+    Options:
+    {other%}
+    Answer: {%multiple_choice_result}
