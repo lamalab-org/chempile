@@ -700,8 +700,10 @@ class TemplateSampler:
     def _fill_template(
         self, template: str, sample_dict: Dict[str, Union[str, List[str]]]
     ) -> str:
+        # import pdb; pdb.set_trace()
+
         for key, value in sample_dict.items():
-            if isinstance(value, list):
+            if isinstance(value, list) and isinstance(value[0], str):
                 value = "\n".join(value)
             if "#" in key:  # This indicates it's an identifier
                 identifier = key.replace("#", "")
