@@ -32,3 +32,15 @@ bibtex:
     URL = {https://doi.org/10.1021/ci8002649}}
 templates:
   - The {#molecule|compound|chemical|molecular species|chemical compound!} with the {SMILES__description} {#representation of |!}{SMILES#} is {MUV-713#not &NULL}{MUV-713__names__noun}.
+  - |-
+    {#Create|Generate|Propose|Suggest|Design|Invent!} a {#molecule|compound!} that is {MUV-713#not &NULL}{MUV-713__names__noun} and report its {SMILES__description}.
+    Result: {SMILES#}
+  - |-
+    Question: Is the {SMILES__description} {SMILES#} {MUV-713__names__noun}?
+    Answer: {MUV-713#no&yes}
+  - |-
+    Task: Please {#determine|predict|estimate!} if the {#molecule|compound!} with the {SMILES__description} {SMILES#} is {MUV-713__names__noun}.
+    Result: {MUV-713#no&yes}
+  - |-
+    Task: Please {#create|generate!} a {#molecule|compound!} that is {MUV-713#not &NULL}{MUV-713__names__noun} and report its {SMILES__description}.
+    Result: {SMILES#}
