@@ -35,3 +35,50 @@ bibtex:
     pages={e1900101},
     year={2020}
     }"
+
+templates:
+  - |-
+    {#Task: |Task: |!}{#Predict|Estimate!} the {flashpoint__names__noun} of {SMILES#}.
+    {#Answer: |A: |!}The {flashpoint__names__noun} is {flashpoint#} {flashpoint__units}.
+  - |-
+    {#Task: |Task: |!}{#Predict|Estimate!} the {flashpoint__names__noun} of a {#molecule|compound!} with the {SMILES__description} {SMILES#}?
+    {#Answer: |A: |!}{#The flashpoint point is |!}{flashpoint#} {flashpoint__units}.
+  - |-
+    {#Question: |Q: !}What is the {flashpoint__names__noun} of {SMILES#}?
+    {#Answer: |A: |!}{#The flashpoint point is |!}{flashpoint#} {flashpoint__units}.
+  - |-
+    {#Question: |Q: !}What is the {flashpoint__names__noun} of a {#molecule|compound!} with the {SMILES__description} {SMILES#}?
+    {#Answer: |A: |!}{#The flashpoint point is |!}{flashpoint#} {flashpoint__units}.
+  - |-
+    {#Question: |Q: !}What is a compound with a {flashpoint__names__noun} of {flashpoint#} {flashpoint__units}?
+    {#Answer: |A: |!}{SMILES#}
+  - |-
+    User: I have a question about {SMILES#}.
+    Assistant: {#Sure, what is your question?|How can I help?|That sounds interesting, how can I help?|Interesting, how can I help?!}
+    User: What is the {flashpoint__names__noun} of {#this compound|this molecule!}?
+    Assistant: {#The flashpoint is |!}{flashpoint#} {flashpoint__units}.
+  - |-
+    User: I have a question about a {#compound|molecule!} with the {SMILES__description} {SMILES#}.
+    Assistant: {#Sure, what is your question?|How can I help?|That sounds interesting, how can I help?|Interesting, how can I help?!}
+    User: What is the {flashpoint__names__noun} of {#this compound|this molecule!}?
+    Assistant: {#The flashpoint is |!}{flashpoint#} {flashpoint__units}. {#Is there anything else I can help you with?|Do you have any other questions?|Do you have any other questions for me?|Is there anything else I can help you with today?|Do you have any other questions for me today?!}
+    User: {#Yes,|Indeed,!} what is the name of {#this compound|this molecule!}?
+    Assistant: {SMILES#}
+  - |-
+    Task: Please estimate the {flashpoint__names__noun} of a compound.
+    Compound: {SMILES#}
+    Result:The flashpoint point{flashpoint#} {flashpoint__units}
+  - |-
+    Task: Please estimate the {flashpoint__names__noun} of a compound.
+    {SMILES__description}: {SMILES#}
+    Result:The flashpoint point{flashpoint#} {flashpoint__units}
+  - |-
+    Question: What is the {flashpoint__names__noun} of a compound with the {SMILES__description} {SMILES#} in {flashpoint__units}?
+
+    Answer:The flashpoint point{flashpoint#}
+  - |-
+    Question: Which molecule has a {flashpoint__names__noun} of {flashpoint#} {flashpoint__units}?
+    Pick {%multiple_choice_enum%3%aA1}.
+    Options:
+    {SMILES%}
+    Answer: {%multiple_choice_result}
