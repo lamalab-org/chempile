@@ -94,3 +94,9 @@ templates:
     User: Does the following text contain mentions of {#chemicals|chemical compounds|chemical substances!}? {#Can you return matches?|Can you output matches?|Please return matches.!}
     {#Text: |!}{sentence#}
     Assistant: {#I found|There is!} {matched_words#}.
+  - |-
+    The chemical entities in "{sentence#}" are "{matched_words#}".
+  - |-
+    After analyzing the text "{sentence#}", the identified chemical compounds are "{matched_words#}".
+  - |-
+    The {#result|output|answer!} of chemical entity extraction on "{sentence#}" is "{matched_words#}".
