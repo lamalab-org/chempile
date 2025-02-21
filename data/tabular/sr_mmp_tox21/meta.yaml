@@ -118,4 +118,5 @@ templates:
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2%aA1} without using any {#other|additional!} words.
     Options:
     {toxicity_SR-MMP%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+

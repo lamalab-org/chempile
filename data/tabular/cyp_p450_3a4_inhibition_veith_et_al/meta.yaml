@@ -121,7 +121,8 @@ templates:
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2%aA1} without using any {#other|additional!} words.
     Options:
     {CYP3A4_inhibition%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
     Question: Which molecules are {CYP3A4_inhibition#not &NULL}{CYP3A4_inhibition__names__gerund}?
@@ -135,4 +136,5 @@ templates:
     Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
     Options:
     {SMILES%CYP3A4_inhibition%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+

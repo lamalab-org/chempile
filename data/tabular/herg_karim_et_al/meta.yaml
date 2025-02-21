@@ -105,7 +105,8 @@ templates:
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2%aA1} without using any {#other|additional!} words.
     Options:
     {herg_blocker%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
     Question: Which molecules are {herg_blocker#not &NULL}a {herg_blocker__names__noun}?
@@ -119,4 +120,5 @@ templates:
     Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
     Options:
     {SMILES%herg_blocker%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+

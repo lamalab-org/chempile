@@ -73,7 +73,8 @@ templates:
     Options:
     {Tg_exp%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -85,7 +86,8 @@ templates:
     Options:
     {Tg_calc%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -96,7 +98,8 @@ templates:
     Options:
     {rho_300K_calc%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -107,7 +110,8 @@ templates:
     Options:
     {Tg_exp%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -119,4 +123,5 @@ templates:
     Options:
     {Tg_calc%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+

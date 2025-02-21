@@ -57,7 +57,8 @@ templates:
     Question: What is the {exp__names__noun} of the {SMILES__description} {SMILES#}?
     Options:
     {exp%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Question: What is the {exp__names__noun} for the {#molecule|chemical|compound!} represented by the {SMILES__description} {SMILES#}?
 
@@ -90,7 +91,8 @@ templates:
     Options:
     {exp%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: {#Estimate|Guess|Predict|Provide!} the {exp__names__noun} for the {#molecule|chemical|compound!} with the {SMILES__description} {SMILES#}.
 

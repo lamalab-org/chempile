@@ -111,7 +111,7 @@ templates:
     Description: A molecule that is {carcinogen__names__adjective}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{carcinogen#False&True}
+    Result: {carcinogen#False&True}
   - |-
     Task: Please answer the multiple choice question.
     Question: Is the molecule with the {SMILES__description} {#representation of |!}{SMILES#} {carcinogen__names__adjective}?
@@ -125,7 +125,7 @@ templates:
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2%aA1} without using any {#other|additional!} words.
     Options:
     {carcinogen%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
   - |-
     Task: Please answer the multiple choice question.
     Question: Which molecules are {carcinogen#not &NULL}{carcinogen__names__adjective}?
@@ -139,4 +139,4 @@ templates:
     Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
     Options:
     {SMILES%carcinogen%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}

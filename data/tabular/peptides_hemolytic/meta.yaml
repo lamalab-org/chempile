@@ -120,7 +120,8 @@ templates:
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2%aA1} without using any {#other|additional!} words.
     Options:
     {hemolytic%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
     Question: Which amino acid sequences are {hemolytic#not &NULL}{hemolytic__names__adjective}?
@@ -134,4 +135,5 @@ templates:
     Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
     Options:
     {sequence%hemolytic%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+

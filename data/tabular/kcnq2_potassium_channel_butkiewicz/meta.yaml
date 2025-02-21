@@ -152,7 +152,8 @@ templates:
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2%aA1} without using any {#other|additional!} words.
     Options:
     {activity_kcnq2_potassium_channel%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
     Question: Which molecules are {activity_kcnq2_potassium_channel#not &NULL}{activity_kcnq2_potassium_channel__names__gerund}?
@@ -166,4 +167,5 @@ templates:
     Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
     Options:
     {SMILES%activity_kcnq2_potassium_channel%}
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+

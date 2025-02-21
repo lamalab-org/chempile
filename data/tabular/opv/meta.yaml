@@ -182,7 +182,8 @@ templates:
 
     {PCE_ave%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -194,7 +195,8 @@ templates:
 
     {Voc%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -206,7 +208,8 @@ templates:
 
     {Jsc%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -218,7 +221,8 @@ templates:
 
     {FF%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -228,4 +232,5 @@ templates:
 
     {bandgap%}
 
-    Answer:{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
