@@ -22,7 +22,7 @@ identifiers:
     names:
       - noun: chemical formula
     description: chemical formula
-  - id: synthetic_information
+  - id: synthesis_information
     names:
       - noun: synthesis procedure summary
     description: brief description of synthetic procedure
@@ -33,6 +33,37 @@ links:
     description: website with source data
   - url: https://datahub.hymarc.org/dataset/ad580d95-e7e2-4ef4-a7f6-3b2f91a96eba/resource/4ef1c494-366e-43a3-bed4-a3985de5c374/download/hydstormatdb-reversible_hydrides.csv
     description: original_dataset
-num_points: 30
+num_points: 5
 bibtex:
-  - "@online{hymarcReversibleHydrides,\ntitle={Hydrogen Storage Materials Database Reversible Hydrides},\nauthor={HyMARC},\nyear={2019}"
+  - |-
+    @online{hymarcReversibleHydrides,
+      title={Hydrogen Storage Materials Database Reversible Hydrides},
+      author={HyMARC},
+      year={2019
+    }
+templates:
+  - |-
+    {#Task: Predict the theoretical hydrogen storage capacity of the following material.|Task: Estimate the theoretical hydrogen storage capacity of the following material.|Task: Calculate the theoretical hydrogen storage capacity of the following material.|Task: Determine the theoretical hydrogen storage capacity of the following material.|Task: Find the theoretical hydrogen storage capacity of the following material.|Task: Compute the theoretical hydrogen storage capacity of the following material.!}
+    {#Material: |Compound: |Hydride: |!}{material_name#}
+    {#Chemical formula: |Formula: |!}{chemical_formula#}
+    {#Theoretical hydrogen storage capacity: |Theoretical capacity: |!}{h_weight_density_theory#}{h_weight_density_theory__units}.
+  - |-
+    Question: What is the theoretical hydrogen storage capacity of the following material?
+    Description: {material_name__description} {material_name#}
+    Constraint: Return only the theoretical hydrogen storage capacity without any additional information.
+    Answer: {h_weight_density_theory#}{h_weight_density_theory__units}.
+  - |-
+    The theoretical hydrogen storage capacity of {material_name#} is {h_weight_density_theory#}{h_weight_density_theory__units}.
+  - |-
+    User: I need to know the theoretical hydrogen storage capacity of {material_name#}.
+    Assistant: The theoretical hydrogen storage capacity is {h_weight_density_theory#}{h_weight_density_theory__units}.
+  - |-
+    Task: Please answer the multiple choice question.
+    Question: Which materials have a theoretical hydrogen storage capacity of {h_weight_density_theory#}{h_weight_density_theory__units}?
+    Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {material_name%}
+    Answer: {%multiple_choice_result}
+  - |-
+    Task: Describe the synthetic procedure for the following material: {material_name#}
+    Answer: {synthesis_information#}
