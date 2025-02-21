@@ -112,8 +112,8 @@ eprint = {https://academic.oup.com/nar/article-pdf/47/D1/D930/27437436/gky1075.p
         str, str_presenter
     )  # to use with safe_dum
     fn_meta = "meta.yaml"
-    with open(fn_meta, "w") as f:
-        yaml.dump(meta, f, sort_keys=False)
+    #with open(fn_meta, "w") as f:
+        #yaml.dump(meta, f, sort_keys=False)
 
     print(f"Finished processing {meta['name']} dataset!")
 

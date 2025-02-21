@@ -295,6 +295,7 @@ class TemplateSampler:
         var_dict = next(
             x for x in self.meta["identifiers"] + self.meta["targets"] if x["id"] == var
         )
+
         if var_dict["type"] == "continuous":
             if not isinstance(out, (float, int)):
                 raise ValueError(f"out is not a number (int or float): {out}")
@@ -307,7 +308,6 @@ class TemplateSampler:
             out = f"{round(out, significant_digits):.{significant_digits}f}"
         else:
             out = str(out)
-
         if "|" in out:
             choices = [
                 c for c in out.split("|") if isinstance(c, str) or not math.isnan(c)
@@ -498,6 +498,7 @@ class TemplateSampler:
         correct_choice_indicator = self._get_target_from_row(
             sample, multiple_choice_indicator + "#"
         )
+
         df_sample = self.df.sample(len(symbols) - 1)[
             [multiple_choice_var, multiple_choice_indicator]
         ]
@@ -522,7 +523,23 @@ class TemplateSampler:
             )
             if indicator == correct_choice_indicator
         ]
+        var_dict = next(
+            x
+            for x in self.meta["identifiers"] + self.meta["targets"]
+            if x["id"] == multiple_choice_var
+        )
+        if var_dict["type"] == "continuous":
+            significant_digits = var_dict.get(
+                "significant_digits",
+                self.config.get(
+                    "DEFAULT_SIGNIFICANT_DIGITS", DEFAULT_SIGNIFICANT_DIGITS
+                ),
+            )
 
+            multiple_choices = [
+                f"{round(float(x), significant_digits):.{significant_digits}f}"
+                for x in multiple_choices
+            ]
         return list(multiple_choices), correct_choice_idx
 
     def _format_choices(self, symbols: List[str], choices: List[str]) -> str:
@@ -701,7 +718,7 @@ class TemplateSampler:
         self, template: str, sample_dict: Dict[str, Union[str, List[str]]]
     ) -> str:
         for key, value in sample_dict.items():
-            if isinstance(value, list):
+            if isinstance(value, list) and isinstance(value[0], str):
                 value = "\n".join(value)
             if "#" in key:  # This indicates it's an identifier
                 identifier = key.replace("#", "")

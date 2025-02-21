@@ -95,3 +95,5 @@ templates:
     Assistant: {#Sure, |I can give it a try, |!} I {#would need|need|require!} the description of the {#crystal structure|material|compound|material structure|structure!} to do that.
     User: {description#}
     Assistant: {cifstr#}
+  - The {#crystal structure|material|compound|material structure|structure!} described by {description#} is represented by the {cifstr__names__noun} {cifstr#}.
+  - The {cifstr__names__noun} {cifstr#} corresponds to the {#crystal structure|material|compound|material structure|structure!} described by {description#}.

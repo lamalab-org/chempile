@@ -1,4 +1,8 @@
 import pandas as pd
+from rdkit import Chem
+
+def canonicize_smiles(smiles):
+    return Chem.MolToSmiles(Chem.MolFromSmiles(smiles))
 
 
 def process():
@@ -28,6 +32,7 @@ def process():
     # the values for all those columns are floats.
     df = df[df[columns].apply(lambda x: x.apply(lambda y: isinstance(y, float))).all(1)]
     df[columns] = df[columns].astype(float)
+    df["SMILES"] = df["SMILES"].apply(canonicize_smiles)
     print(len(df))
     df.to_csv("data_clean.csv", index=False)
 

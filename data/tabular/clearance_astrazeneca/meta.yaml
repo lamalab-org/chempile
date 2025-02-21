@@ -64,3 +64,19 @@ bibtex:
     title = {Mechanistic insights from comparing intrinsic clearance values between
     human liver microsomes and hepatocytes to guide drug design},
     journal = {European Journal of Medicinal Chemistry}
+
+templates:
+  - |-
+    The {drug_clearance__names__noun} of a drug with the {SMILES__description} {SMILES#} is {drug_clearance#}{drug_clearance__units}.
+  - |-
+    User: {#I need|I want!} to know the {drug_clearance__names__noun} of a drug with the {SMILES__description} {SMILES#}.
+    Assistant: The {drug_clearance__names__noun} is {drug_clearance#}{drug_clearance__units}.
+  - |-
+    Question: What is the {drug_clearance__names__noun} of a drug with the {SMILES__description} {SMILES#}?
+    Constraint: Return only the {drug_clearance__names__noun} without {#any additional information|any extra information|any other details!}!
+    Answer: {drug_clearance#}{drug_clearance__units}.
+  - |-
+    Task: {#Predict|Estimate|Calculate|Determine!} the {drug_clearance__names__noun} of a drug with the {SMILES__description} {SMILES#}.
+    Solution: {drug_clearance#}{drug_clearance__units}.
+  - |-
+    The {#molecule|compound!} with the {SMILES__description} {SMILES#} has a {drug_clearance__names__noun} of {drug_clearance#}{drug_clearance__units}.

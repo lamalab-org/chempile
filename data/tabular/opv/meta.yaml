@@ -158,19 +158,19 @@ templates:
   - |-
     Question: What is the {Voc__names__noun} of a {#non-fullerene|PC71BM|PCBM!} {#organic photovoltaics|OPV|organic solar cell|organic photovoltaics (OPV)!} device with a donor polymer with monomer {SMILES__description} {SMILES#}?
 
-    Answer:<EOI>{Voc#} {Voc__units}
+    Answer:{Voc#} {Voc__units}
   - |-
     Question: What is the {Jsc__names__noun} of a {#non-fullerene|PC71BM|PCBM!} {#organic photovoltaics|OPV|organic solar cell|organic photovoltaics (OPV)!} device with a donor polymer with monomer {SMILES__description} {SMILES#}?
 
-    Answer:<EOI>{Jsc#} {Jsc__units}
+    Answer:{Jsc#} {Jsc__units}
   - |-
     Question: What is the {FF__names__noun} of a {#non-fullerene|PC71BM|PCBM!} {#organic photovoltaics|OPV|organic solar cell|organic photovoltaics (OPV)!} device with a donor polymer with monomer {SMILES__description} {SMILES#}?
 
-    Answer:<EOI>{FF#}
+    Answer:{FF#}
   - |-
     Question: What is the {bandgap__names__noun} of a polymer with monomer {SMILES__description} {SMILES#}?
 
-    Answer:<EOI>{bandgap#} {bandgap__units}
+    Answer:{bandgap#} {bandgap__units}
   - |-
     Task: Please answer the multiple choice question.
 
@@ -182,7 +182,8 @@ templates:
 
     {PCE_ave%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -194,7 +195,8 @@ templates:
 
     {Voc%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -206,7 +208,8 @@ templates:
 
     {Jsc%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -218,7 +221,8 @@ templates:
 
     {FF%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
 
@@ -228,4 +232,5 @@ templates:
 
     {bandgap%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer: {%multiple_choice_result}
+

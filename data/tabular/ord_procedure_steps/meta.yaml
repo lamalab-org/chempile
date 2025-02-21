@@ -51,3 +51,7 @@ templates:
     Task: Convert a {procedure__names__noun} into a {steps_string__names__noun}.
     Procedure: {procedure#}
     Answer: {steps_string#}
+  - |-
+    The {procedure__names__noun} {procedure#} {#is|involves|requires!} the following {steps_string__names__noun}: {steps_string#}
+  - |-
+    The {steps_string__names__noun} {steps_string#} {#are|is!} part of the {procedure__names__noun} {procedure#}

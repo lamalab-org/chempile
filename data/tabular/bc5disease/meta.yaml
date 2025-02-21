@@ -63,10 +63,8 @@ templates:
 
     {#Sentence: |Text: |!}{sentence#}
 
-    Answer:<EOI>{matched_words#}
+    Answer: {matched_words#}
   - |-
     Task: {#Please identify|Identify!} the diseases in the {sentence__names__noun} provided. If there is no {#match|mention of a disease|matching entity!}, return `no match`.
-
     {#Sentence: |Text: |!}{sentence#}
-
-    Answer:<EOI>{matched_words#}
+    Answer: {matched_words#}

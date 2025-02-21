@@ -1,6 +1,8 @@
 import datasets
 import pandas as pd
 import yaml
+from huggingface_hub import hf_hub_download
+
 
 SPLITS = ["train", "test", "validation"]
 ORIGINAL_COLUMNS = ["CID", "SMILES", "description"]
@@ -137,7 +139,11 @@ def get_dataset(split: str) -> datasets.Dataset:
     https://huggingface.co/docs/datasets/upload_dataset
     """
     # 3 splits of train, val, test
-    return datasets.load_dataset("OpenBioML/chebi_20", split=split, delimiter="\t")
+    # return datasets.load_dataset("OpenBioML/chebi_20", split=split, delimiter="\t")
+    df = hf_hub_download(
+        repo_id="OpenBioML/chebi_20", repo_type="dataset", filename=split + ".csv"
+    )
+    return pd.read_csv(df, delimiter="\t")
 
 
 def remove_whitespace(sample: dict) -> dict:
@@ -147,19 +153,20 @@ def remove_whitespace(sample: dict) -> dict:
 
 def clean_dataset(hf_data: datasets.Dataset) -> datasets.Dataset:
     """Clean the dataset"""
-    assert list(hf_data.features.keys()) == ORIGINAL_COLUMNS
+    assert list(hf_data.columns) == ORIGINAL_COLUMNS
     for old, new in zip(ORIGINAL_COLUMNS, NEW_COLUMNS):
         if old != new:
-            hf_data.rename_column(old, new)
-    return hf_data.map(remove_whitespace, num_proc=4)
-
+            # rename pandas columns
+            hf_data = hf_data.rename(columns={old: new})
+    # return hf_data.map(remove_whitespace, num_proc=4)
+    return hf_data.apply(remove_whitespace, axis=1)
 
 def create_meta_yaml(num_points: int):
     """Create meta configuration file for the dataset"""
     # create meta yaml
     META_TEMPLATE["num_points"] = num_points
-    with open(META_YAML_PATH, "w+") as f:
-        yaml.dump(META_TEMPLATE, f, sort_keys=False)
+    # with open(META_YAML_PATH, "w+") as f:
+    #     yaml.dump(META_TEMPLATE, f, sort_keys=False)
     print(f"Finished processing chebi-20 {META_TEMPLATE['name']} dataset!")
 
 
@@ -169,8 +176,8 @@ if __name__ == "__main__":
     for split in SPLITS:
         hf_data = get_dataset(split)
         hf_data_clean = clean_dataset(hf_data)
-        num_samples += hf_data_clean.num_rows
-        df_tmp = hf_data_clean.to_pandas()
+        num_samples += hf_data_clean.shape[0]
+        df_tmp = hf_data_clean.copy()
         # TODO: Split information is not used here and in the YAML file,
         # better use the split defined by all other files.
         # df_tmp["split"] = split if split != "validation" else "valid"

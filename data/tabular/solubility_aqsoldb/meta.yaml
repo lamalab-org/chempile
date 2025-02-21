@@ -64,3 +64,10 @@ templates:
     Assistant: I {#recommend|suggest|propose|advise|!} the {#compound|drug|chemical|molecule!} with the {SMILES__description} {SMILES#}. {#Is there anything else I can do for you?|Do you need anything else?|Anything else?|!}
     User: {#Yes, |!}I would like to know the {compound_name__names__noun} of the {#compound|drug|chemical|molecule!}.
     Assistant: The {compound_name__names__noun} of the {#compound|drug|chemical|molecule!} with the {SMILES__description} {SMILES#} is {compound_name#}.
+  - For the given {#compound|drug|chemical|molecule!} represented by its {SMILES__description} {SMILES#}, the calculated {aqeuous_solubility__names__noun} is {aqeuous_solubility#} {aqeuous_solubility__units}.
+  - In our analysis, the {aqeuous_solubility__names__noun} of the {#compound|drug|chemical|molecule!} with structure {SMILES__description} {SMILES#} is reported as {aqeuous_solubility#} {aqeuous_solubility__units}.
+  - Measured at room temperature, the {aqeuous_solubility__names__noun} for the {#compound|drug|chemical|molecule!} identified by its {compound_name__names__noun} {compound_name#} and depicted by {SMILES__description} {SMILES#} is {aqeuous_solubility#} {aqeuous_solubility__units}.
+  - Our dataset indicates that the {aqeuous_solubility__names__noun} of a {#compound|drug|chemical|molecule!} with {SMILES__description} {SMILES#} is determined to be {aqeuous_solubility#} {aqeuous_solubility__units}.
+  - For the {#compound|drug|chemical|molecule!} specified by its {compound_name__names__noun} {compound_name#} and represented with {SMILES__description} {SMILES#}, the {aqeuous_solubility__names__noun} is quantified at {aqeuous_solubility#} {aqeuous_solubility__units}.
+  - The computed {aqeuous_solubility__names__noun} of the {#compound|drug|chemical|molecule!} having structure {SMILES__description} {SMILES#} registers as {aqeuous_solubility#} {aqeuous_solubility__units}.
+  - When evaluating the {#compound|drug|chemical|molecule!} with {SMILES__description} {SMILES#}, we observe a {aqeuous_solubility__names__noun} value of {aqeuous_solubility#} {aqeuous_solubility__units}.

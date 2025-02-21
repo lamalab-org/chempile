@@ -228,8 +228,8 @@ Answer:<EOI>{%multiple_choice_result}""",  # noqa: E501
         str, str_presenter
     )  # to use with safe_dum
     fn_meta = "meta.yaml"
-    with open(fn_meta, "w") as f:
-        yaml.dump(meta, f, sort_keys=False)
+    #with open(fn_meta, "w") as f:
+        #yaml.dump(meta, f, sort_keys=False)
 
     print(f"Finished processing {meta['name']} dataset!")
 

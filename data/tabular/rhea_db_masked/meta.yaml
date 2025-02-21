@@ -67,3 +67,4 @@ templates:
     Task: Predict the masked component in a {masked_rxn_smiles__names__noun}.
     Description: {masked_rxn_smiles#}
     {#Answer|Solution!}: {missing_component#}
+  - In the {masked_rxn_smiles__names__noun} {masked_rxn_smiles#}, the undisclosed {#chemical|compound!} has been identified as {missing_component#}.

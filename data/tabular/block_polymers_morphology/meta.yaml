@@ -64,3 +64,4 @@ templates:
     Assistant: {#Cool, |Awesome, |Great, |That sounds interesting, !}{#do you have any other constraints?|do you have other requirements?|what else should I take into account?!}
     User: The {Mn__names__noun} should be {Mn#} {Mn__units}, the {f1__names__noun} should be {f1#}.
     Assistant: I {#recommend|suggest|propose|advise!} the {#polymer|di-block copolymer|copolymer!} with BigSMILES {BigSMILES#}{Mw#}{D#}.
+  - The di-block copolymer with BigSMILES {BigSMILES#} {#exhibits|shows!} a {phase1#} phase at {T#} {T__units}, with a number-average molar mass (Mn) of {Mn#} {Mn__units} and a block volume fraction (f1) of {f1#}. Its additional polymer metrics include a mass-average molar mass (Mw) of {Mw#} and a dispersity (D) of {D#}.

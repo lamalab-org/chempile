@@ -61,4 +61,4 @@ templates:
     Result: {SMILES#}
   - |-
     Task: Please {#create|generate!} {#a compound |a !}{SMILES__description} that {rel1_type#} {node2_name#}.
-    Result:<EOI> {SMILES#}
+    Result: {SMILES#}

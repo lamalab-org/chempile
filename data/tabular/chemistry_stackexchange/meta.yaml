@@ -28,3 +28,9 @@ templates:
     {#Task: Generate a title for this question.|Task: Create a meaningful title for this question.|Task: Summarize the question in a title.!}
     {#Question: |Inquiry: |\n!}{#q}
     {#Assistant: |Title: |Answer: |!}{#title}
+  - |-
+    {#Task: Generate a question based on the answer.|Task: Create a question that corresponds to the answer.|Task: Formulate a question that matches the answer.|Task: Develop a question that aligns with the answer.|Task: Construct a question that is answered by the provided response.|Task: Create a question that is relevant to the answer.!}
+    {#Answer: |Response: |Solution: |!}{#a}
+    {#Assistant: |Question: |Inquiry: |!}{#q}
+  - The answer to the {#question|help request|query!} "{#q}" is "{#a}".
+  - The title of the {#question|help request|query!} "{#q}" is "{#title}".

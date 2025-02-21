@@ -93,17 +93,17 @@ templates:
 
     Compound: {NAME#}
 
-    Result:<EOI>{mp#} {mp__units}
+    Result: {mp#} {mp__units}
   - |-
     Task: Please estimate the {mp__names__noun} of a compound.
 
     {SMILES__description}: {SMILES#}
 
-    Result:<EOI>{mp#} {mp__units}
+    Result: {mp#} {mp__units}
   - |-
     Question: What is the {mp__names__noun} of a compound with the {SMILES__description} {SMILES#} in {mp__units}?
 
-    Answer:<EOI>{mp#}
+    Answer:{mp#}
   - |-
     Question: Which molecule has a {mp__names__noun} of {mp#} {mp__units}?
     Pick {%multiple_choice_enum%3%aA1}.

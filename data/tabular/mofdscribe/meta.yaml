@@ -58,3 +58,25 @@ templates:
     Task: {#Create|Generate|Propose!} a {cif__names__noun} of a {#metal-organic framework|MOF|crystal structure|structure|material!} with the following description
     {description#}.
     {#Answer: |A: |!}{cif#}
+  - |-
+    The {cif__names__noun} {cif#} describes a {#metal-organic framework|MOF|crystal structure|structure|material!} with the following description
+    {description#}.
+  - |-
+    Task: Translate the description below into its corresponding {cif__names__noun} {cif#} for a metal-organic framework.
+    Description: {description#}
+  - |-
+    Based on the following details of a metal-organic framework, generate the {cif__names__noun} {cif#}.
+    Details: {description#}
+  - |-
+    Please convert this MOF structure description into its {cif__names__noun} {cif#} representation.
+    {description#}
+  - |-
+    Task: Using the description provided, formulate the matching {cif__names__noun} {cif#} that encapsulates the metal-organic framework's structure.
+    Input: {description#}
+  - |-
+    Instruction: Derive a {cif__names__noun} {cif#} file for the metal-organic framework described as follows.
+    Response: {description#}
+  - The {cif__names__noun} of {#metal-organic framework|MOF|crystal structure|structure|material!} matching the description {description#} is {cif#}.
+  - |-
+    Convert the given metal-organic framework description into a comprehensive {cif__names__noun} {cif#}.
+    Response: {description#}

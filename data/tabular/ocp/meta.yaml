@@ -43,3 +43,19 @@ templates:
     Task: {#Predict|Estimate|Calculate|Compute|Determine!} the adsorption energy of the following adsorbate-adsorbent pair.
     Text: {text#}
     Answer: {target#} {target__units}
+  - The adsorption energy of the following adsorbate-adsorbent pair is {target#} {target__units}.
+  - |-
+    {#Task|Problem statement!}: Answer the {#multiple choice|multiple-choice|MCQ!} question.
+    {#Question|Query!}: What is the {target__names__noun} of a {#compound|drug!} with the {text__description} {text#}?
+    Constraint: You must based on the text description, return none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Text: {text#}
+    Options:
+    {target%}
+    Answer: {%multiple_choice_result}. {target#} {target__units}
+  - |-
+    {#Task|Problem statement!}: Answer the {#multiple choice|multiple-choice|MCQ!} question.
+    {#Question|Query!}: Which description corresponds to an adsorption energy of {target#} {target__units}?
+    Constraint: You must return none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {text%}
+    Answer: {%multiple_choice_result}

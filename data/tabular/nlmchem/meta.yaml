@@ -37,8 +37,11 @@ bibtex:
     doi = {10.1038/s41597-021-00875-1},
     url = {https://doi.org/10.1038/s41597-021-00875-1}
     }
+
 templates:
   - The {Abbreviation__names__noun} "{Abbreviation#}" stands for "{#Full_Form}".
+  - The abbreviation "{Abbreviation#}" {#matches the full form|stands for|is associated with!} "{Full_Form#}".
+  - In other {#words|terms!}, "{Abbreviation#}" is the abbreviation for "{Full_Form#}".
   - |-
     Task: Please give me the {Full_Form__names__noun} of the {Abbreviation__names__noun}.
     Abbreviation: {Abbreviation#}
@@ -62,9 +65,12 @@ templates:
     Task: Please give me the {Full_Form__names__noun} of the {Abbreviation__names__noun}.
     Abbreviation: {Abbreviation#}
     Constraint: Answer the question with {#full|complete!} words.
-    Result:<EOI>{Full_Form#}
+    Result: {Full_Form#}
   - |-
     Task: Please give me the {Abbreviation__names__noun} of the following {Full_Form__names__noun}.
     Full form or meaning of the abbreviation: {Full_Form#}
     Constraint: Answer the question with an {Abbreviation__names__noun}.
-    Result:<EOI>{Abbreviation#}
+    Result: {Abbreviation#}
+  - |-
+    User: I'm {#searching for|looking for!trying to find} the {Abbreviation__names__noun} for: {#Full_Form}
+    Assistant: {#Yes|Of course|Sure|Yes, I'm happy to help!}, here you go: {Abbreviation#}

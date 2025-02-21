@@ -25,6 +25,7 @@ license: CC BY 4.0
 links:
   - url: https://github.com/lamalab-org/chem-caption
     description: Original codebase used to generate this dataset
+num_points: 812177
 templates:
   - |-
     Question: {#How many times|How often!} does the {#molecule|chemical|compound|chemical structure!} with {representation_type#} {representation#} contain the substructure with the {smarts__names__noun} {#smarts#}?
@@ -38,3 +39,7 @@ templates:
   - |-
     User: {#I want to|I have to|I must|I would like to!} know how many times the {#molecule|chemical|compound|chemical structure!} with {representation_type#} {representation#} contains a {completion#} substructure.
     Assistant: The {#molecule|chemical|compound|chemical structure!} contains the substructure with the {smarts__names__noun} {#smarts#} {completion#} times.
+  - The {#molecule|chemical|compound|chemical structure!} with {representation_type#} {representation#} contains the substructure with the {smarts__names__noun} {#smarts#} {completion#} times.
+  - |-
+    Task: {#Determine|Calculate|Estimate|Predict!} the number of times the {#molecule|chemical|compound|chemical structure!} with {representation_type#} {representation#} contains the substructure with the {smarts__names__noun} {#smarts#}.
+    Solution: {completion#}

@@ -52,3 +52,12 @@ templates:
     User: Does the following text contain mentions of diseases?{# Can you return matches?| Can you output matches?!}
     {#Text: |!}{sentence#}
     Assistant: {#I found|There is!} {matched_words#}
+  - |-
+    Question: Are there any mentions of diseases in the following text?
+    {#Text: |!}{sentence#}
+    Answer: {matched_words#}
+  - |-
+    The words {matched_words#} in the sentence {sentence#} are mentions of diseases.
+  - |-
+    Task: Identify all the disease mentions in the following text: {sentence#}.
+    Solution: {matched_words#}

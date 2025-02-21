@@ -63,3 +63,13 @@ templates:
     Assistant: {#Cool, |Awesome, |Great, |That sounds interesting, |!}I would need to know the {target__names__noun} of the {#compound|drug|chemical|molecule!} you want to design.
     User: The {target__names__noun} should be {target#} {target__units}.
     Assistant: I {#recommend|suggest|propose|advise|!} the {#compound|drug|chemical|molecule!} with the {SMILES__description} {SMILES#}.
+  - |-
+    {#Question:|Q:!} help me identify which of the options below have a {target__names__noun} of {target#} {target__units}.
+    Constraint: You must select none, one or more options from {%multiple_choice_enum%3-5%aA1} without using any {#other|additional!} words.
+    Options: {SMILES%target%}
+    Answer: {%multiple_choice_result}
+  - |-
+    {#Question:|Q:!} help me identify the correct solubility of the {#compound|molecule!} with the {SMILES__description} {SMILES#}.
+    Constraint: You must select none, one or more options from {%multiple_choice_enum%3-5%aA1} without using any {#other|additional!} words.
+    Options: {target%SMILES%}
+    Answer: {%multiple_choice_result}
