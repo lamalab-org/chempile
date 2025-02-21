@@ -36,8 +36,8 @@ bibtex:
     doi = {10.1093/nar/gkac1052},
     url = {https://doi.org/10.1093/nar/gkac1052}}
 templates:
-  #    - |-
-  #      The {#molecule|chemical|compound!} with the {SMILES__description}{# representation|!} {SMILES#} binds to the {#AA sequence|amino acid sequence|peptide sequence|protein!} {sequence#} at the {#site|binding site|position!} {start_binding_site#}{#-| to !}{end_binding_site#}.
+  - |-
+    The {#molecule|chemical|compound!} with the {SMILES__description}{# representation|!} {SMILES#} binds to the {#AA sequence|amino acid sequence|peptide sequence|protein!} {sequence#} at the {#site|binding site|position!} {start_binding_site#}{#-| to !}{end_binding_site#}.
   - |-
     Task: {#Find|Identify|Come up with!} a binding site for the {#molecule|chemical|compound!} in the {#AA sequence|amino acid sequence|peptide sequence|protein!}.
     {#AA sequence|Amino acid sequence|Peptide sequence|Protein!}: {sequence#}

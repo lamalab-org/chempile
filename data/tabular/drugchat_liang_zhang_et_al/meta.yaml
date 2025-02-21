@@ -21,7 +21,7 @@ links:
     description: corresponding publication
   - url: https://github.com/UCSD-AI4H/drugchat
     description: rep & data source
-num_points: 143,517
+num_points: 143517
 bibtex:
   - |-
     @article{Liang2023,
