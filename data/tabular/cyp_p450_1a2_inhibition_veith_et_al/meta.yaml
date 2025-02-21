@@ -102,7 +102,7 @@ templates:
     Description: A molecule that is {CYP1A2_inhibition__names__gerund}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{CYP1A2_inhibition#False&True}
+    Result: {CYP1A2_inhibition#False&True}
   - |-
     Task: Please classify a molecule based on the description.
     Description: A molecule that is {CYP1A2_inhibition__names__gerund}.

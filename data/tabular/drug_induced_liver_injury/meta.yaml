@@ -97,7 +97,7 @@ templates:
     Description: A molecule that {#shows|causes!} a {liver_injury__names__noun}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{liver_injury#False&True}
+    Result: {liver_injury#False&True}
   - |-
     Task: Please answer the multiple choice question.
     Question: Is the molecule with the {SMILES__description} {#representation of |!}{SMILES#} causing a {liver_injury__names__noun}?

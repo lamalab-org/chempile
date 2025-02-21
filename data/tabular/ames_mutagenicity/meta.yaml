@@ -99,7 +99,7 @@ templates:
     Description: A molecule that is {mutagenic__names__adjective}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{mutagenic#False&True}
+    Result: {mutagenic#False&True}
   - |-
     Task: Please answer the multiple choice question.
     Question: Is the molecule with the {SMILES__description} {#representation of |!}{SMILES#} {mutagenic__names__adjective}?

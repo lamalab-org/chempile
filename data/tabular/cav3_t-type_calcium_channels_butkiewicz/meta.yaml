@@ -136,7 +136,7 @@ templates:
     Description: A molecule that is {activity_cav3_t_type_calcium_channels__names__gerund}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{activity_cav3_t_type_calcium_channels#False&True}
+    Result: {activity_cav3_t_type_calcium_channels#False&True}
   - |-
     Task: Please classify a molecule based on the description.
     Description: A molecule that is {activity_cav3_t_type_calcium_channels__names__gerund}.

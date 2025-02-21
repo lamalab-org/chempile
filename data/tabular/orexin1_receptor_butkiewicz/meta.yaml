@@ -140,11 +140,11 @@ templates:
     Description: A molecule that is {activity_orexin1__names__adjective}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{activity_orexin1#False&True}
+    Result: {activity_orexin1#False&True}
   - |-
     Task: Please {#give me|create|generate!} the {SMILES__description} of a {#molecule|chemical|chemical structure!} based on the {#text |!}description{# below|!}.
     Description: A molecule that is {activity_orexin1__names__adjective}.
-    Result:{SMILES#}
+    Result: {SMILES#}
   - |-
     Task: Please answer the multiple choice question.
     Question: Is the molecule with the {SMILES__description} {#representation of |!}{SMILES#} {activity_orexin1__names__adjective}?

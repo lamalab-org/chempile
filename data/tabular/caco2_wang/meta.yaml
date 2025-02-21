@@ -103,7 +103,7 @@ templates:
     Description: Predict the {permeability__names__noun}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: You must provide a numerical estimate in units of {permeability__units}.
-    Result:{permeability#}
+    Result: {permeability#}
   - |-
     Task: Please answer the multiple choice question.
     Question: Which molecule has the highest {permeability__names__noun}?

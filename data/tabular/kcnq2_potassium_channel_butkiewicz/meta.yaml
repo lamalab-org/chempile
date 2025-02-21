@@ -139,7 +139,7 @@ templates:
     Description: A molecule that is {activity_kcnq2_potassium_channel__names__gerund}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{activity_kcnq2_potassium_channel#False&True}
+    Result: {activity_kcnq2_potassium_channel#False&True}
   - |-
     Task: Please classify a molecule based on the description.
     Description: A molecule that is {activity_kcnq2_potassium_channel__names__gerund}.

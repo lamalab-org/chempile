@@ -101,11 +101,11 @@ templates:
     Description: A amino acid sequence that is {nonfouling__names__adjective}.
     {#amino acid sequence |!}: {sequence#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{nonfouling#False&True}
+    Result: {nonfouling#False&True}
   - |-
     Task: Please {#give me|create|generate!} a {#amino acid sequence |!} based on the {#text |!}description{# below|!}.
     Description: A amino acid sequence that is {nonfouling__names__adjective}.
-    Result:{sequence#}
+    Result: {sequence#}
   - |-
     Task: Please answer the multiple choice question.
     Question: Is the amino acid sequence with the {#representation of |!}{sequence#} {nonfouling__names__adjective}?

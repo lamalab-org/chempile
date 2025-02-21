@@ -102,11 +102,11 @@ templates:
     Description: A amino acid sequence that is {soluble__names__adjective}.
     {#amino acid sequence |sequence|AA sequence!}: {sequence#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{soluble#False&True}
+    Result: {soluble#False&True}
   - |-
     Task: Please {#give me|create|generate!} a {#amino acid sequence|sequence|AA sequence!} based on the {#text |!}description{# below|!}.
     Description: A amino acid sequence that is {soluble__names__adjective}.
-    Result:{sequence#}
+    Result: {sequence#}
   - |-
     Task: Please answer the multiple choice question.
     Question: Is the peptide with the {sequence__description} {#representation of |!}{sequence#} {soluble__names__adjective}?

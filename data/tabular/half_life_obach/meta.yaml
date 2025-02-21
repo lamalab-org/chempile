@@ -101,7 +101,7 @@ templates:
     Description: Predict the {half_life_duration__names__noun}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: You must provide a numerical estimate in units of {half_life_duration__units}.
-    Result:{half_life_duration#}
+    Result: {half_life_duration#}
   - |-
     Task: Please answer the multiple choice question.
     Question: Which molecule has the longest {half_life_duration__names__noun}?

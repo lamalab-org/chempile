@@ -37,10 +37,10 @@ templates:
     Answer:{MUV-858#no&yes}
   - |-
     Task: Please {#determine|predict|estimate!} if the {#molecule|compound!} with the {SMILES__description} {SMILES#} is {MUV-858__names__noun}.
-    Result:{MUV-858#no&yes}
+    Result: {MUV-858#no&yes}
   - |-
     Task: Please {#create|generate!} a {#molecule|compound!} that is {MUV-858#not &NULL}{MUV-858__names__noun} and report its {SMILES__description}.
-    Result:{SMILES#}
+    Result: {SMILES#}
   - |-
     {#Create|Generate|Propose|Suggest|Design|Invent!} a {#molecule|compound!} that is {MUV-858#not &NULL}{MUV-858__names__noun} and report its {SMILES__description}.
     Result: {SMILES#}

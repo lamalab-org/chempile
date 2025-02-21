@@ -85,7 +85,7 @@ templates:
     Description: A molecule that is a {herg_inhib__names__noun}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{herg_inhib#False&True}
+    Result: {herg_inhib#False&True}
   - |-
     Task: Please classify a molecule based on the description.
     Description: A molecule that is a {herg_inhib__names__noun}.

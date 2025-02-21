@@ -108,11 +108,11 @@ templates:
     Description: A molecule that is {skin_reaction__names__gerund}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{skin_reaction#False&True}
+    Result: {skin_reaction#False&True}
   - |-
     Task: Please {#give me|create|generate!} a {#molecule |!}{SMILES__description} based on the {#text |!}description{# below|!}.
     Description: A molecule that is {skin_reaction__names__gerund}.
-    Result:{SMILES#}
+    Result: {SMILES#}
   - |-
     Task: Please answer the multiple choice question.
     Question: Is the molecule with the {SMILES__description} {#representation of |!}{SMILES#} {skin_reaction__names__gerund}?

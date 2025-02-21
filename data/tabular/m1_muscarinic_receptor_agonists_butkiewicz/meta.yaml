@@ -131,7 +131,7 @@ templates:
     Description: A molecule that is {m1_muscarinic_agonist__names__gerund}.
     {#Molecule |!}{SMILES__description}: {SMILES#}
     Constraint: Even if you are {#uncertain|not sure!}, you must pick either "True" or "False" without using any {#other|additional!} words.
-    Result:{m1_muscarinic_agonist#False&True}
+    Result: {m1_muscarinic_agonist#False&True}
   - |-
     Task: Please classify a molecule based on the description.
     Description: A molecule that is {m1_muscarinic_agonist__names__gerund}.
