@@ -51,3 +51,20 @@ templates:
     Task: {#Predict|Estimate!} the {yield__names__noun} of a reaction based on the {non_yield_steps_string__names__noun}.
     Description: {non_yield_steps_string#}
     Answer: {yield#}{yield__units}
+  - |-
+    Given a chemical reaction with {non_yield_steps_string__names__noun} "{non_yield_steps_string#}", the {yield__names__noun} is {yield#}{yield__units}.
+  - |-
+    The {#expected|predicted|resulting!} {yield__names__noun} for a reaction following these steps: {non_yield_steps_string#} is {yield#}{yield__units}.
+  - |-
+    User: What {yield__names__noun} can I expect when performing this reaction?
+    Reaction details: {non_yield_steps_string#}
+    Assistant: Based on these reaction conditions, you should achieve a {yield__names__noun} of {yield#}{yield__units}.
+  - |-
+    User: Calculate the {yield__names__noun} for this synthetic procedure:
+    {non_yield_steps_string#}
+    Assistant: The calculated {yield__names__noun} for this procedure is {yield#}{yield__units}.
+
+  - |-
+    {#Analyzing|Evaluating|Assessing!} the following {non_yield_steps_string__names__noun}:
+    "{non_yield_steps_string#}"
+    The {yield__names__noun} prediction is {yield#}{yield__units}.
