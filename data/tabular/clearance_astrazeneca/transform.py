@@ -1,5 +1,4 @@
 import pandas as pd
-import yaml
 from tdc.single_pred import ADME
 
 
