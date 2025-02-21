@@ -51,18 +51,18 @@ templates:
   - The polymer with the {compound_name__names__noun} of {compound_name#} has an {Tg_exp__names__noun} of {Tg_exp#} {Tg_exp__units}.
   - The polymer with the {compound_name__names__noun} of {compound_name#} has a {Tg_calc__names__noun} of {Tg_calc#} {Tg_calc__units}.
   - The polymer with the {compound_name__names__noun} of {compound_name#} has a {rho_300K_calc__names__noun} of {rho_300K_calc#} {rho_300K_calc__units}.
-  - What is the {Tg_exp__names__noun} of the polymer with the {PSMILES__description} {PSMILES#}? Answer:<EOI>{Tg_exp#} {Tg_exp__units}.
-  - What is the {Tg_calc__names__noun} of the polymer with the {PSMILES__description} {PSMILES#}? Answer:<EOI>{Tg_calc#} {Tg_calc__units}.
-  - What is the {rho_300K_calc__names__noun} of the polymer with the {PSMILES__description} {PSMILES#}? Answer:<EOI>{rho_300K_calc#} {rho_300K_calc__units}.
-  - What is the {Tg_exp__names__noun} of the polymer with the {compound_name__names__noun} {compound_name#}? Answer:<EOI>{Tg_exp#} {Tg_exp__units}.
-  - What is the {Tg_calc__names__noun} of the polymer with the {compound_name__names__noun} {compound_name#}? Answer:<EOI>{Tg_calc#} {Tg_calc__units}.
-  - What is the {rho_300K_calc__names__noun} of the polymer with the {compound_name__names__noun} {compound_name#}? Answer:<EOI>{rho_300K_calc#} {rho_300K_calc__units}.
+  - What is the {Tg_exp__names__noun} of the polymer with the {PSMILES__description} {PSMILES#}? Answer:{Tg_exp#} {Tg_exp__units}.
+  - What is the {Tg_calc__names__noun} of the polymer with the {PSMILES__description} {PSMILES#}? Answer:{Tg_calc#} {Tg_calc__units}.
+  - What is the {rho_300K_calc__names__noun} of the polymer with the {PSMILES__description} {PSMILES#}? Answer:{rho_300K_calc#} {rho_300K_calc__units}.
+  - What is the {Tg_exp__names__noun} of the polymer with the {compound_name__names__noun} {compound_name#}? Answer:{Tg_exp#} {Tg_exp__units}.
+  - What is the {Tg_calc__names__noun} of the polymer with the {compound_name__names__noun} {compound_name#}? Answer:{Tg_calc#} {Tg_calc__units}.
+  - What is the {rho_300K_calc__names__noun} of the polymer with the {compound_name__names__noun} {compound_name#}? Answer:{rho_300K_calc#} {rho_300K_calc__units}.
   - The polymer with the {PSMILES__description} {PSMILES#} has an {Tg_exp__names__noun} of {Tg_exp#} {Tg_exp__units} and a {Tg_calc__names__noun} of {Tg_calc#} {Tg_calc__units}.
   - The polymer with the {compound_name__names__noun} {compound_name#} has an {Tg_exp__names__noun} of {Tg_exp#} {Tg_exp__units} and a {Tg_calc__names__noun} of {Tg_calc#} {Tg_calc__units}.
-  - Compare the {Tg_exp__names__noun} and {Tg_calc__names__noun} for the polymer with the {PSMILES__description} {PSMILES#}. Answer:<EOI>{Tg_exp#} {Tg_exp__units}, {Tg_calc#} {Tg_calc__units}.
-  - Compare the {Tg_exp__names__noun} and {Tg_calc__names__noun} for the polymer with the {compound_name__names__noun} {compound_name#}. Answer:<EOI>{Tg_exp#} {Tg_exp__units}, {Tg_calc#} {Tg_calc__units}.
-  - What is the {rho_300K_calc__names__noun} of the polymer with the {PSMILES__description} {PSMILES#} at 300K? Answer:<EOI>{rho_300K_calc#} {rho_300K_calc__units}.
-  - What is the {rho_300K_calc__names__noun} of the polymer with the {compound_name__names__noun} {compound_name#} at 300K? Answer:<EOI>{rho_300K_calc#} {rho_300K_calc__units}.
+  - Compare the {Tg_exp__names__noun} and {Tg_calc__names__noun} for the polymer with the {PSMILES__description} {PSMILES#}. Answer:{Tg_exp#} {Tg_exp__units}, {Tg_calc#} {Tg_calc__units}.
+  - Compare the {Tg_exp__names__noun} and {Tg_calc__names__noun} for the polymer with the {compound_name__names__noun} {compound_name#}. Answer:{Tg_exp#} {Tg_exp__units}, {Tg_calc#} {Tg_calc__units}.
+  - What is the {rho_300K_calc__names__noun} of the polymer with the {PSMILES__description} {PSMILES#} at 300K? Answer:{rho_300K_calc#} {rho_300K_calc__units}.
+  - What is the {rho_300K_calc__names__noun} of the polymer with the {compound_name__names__noun} {compound_name#} at 300K? Answer:{rho_300K_calc#} {rho_300K_calc__units}.
   - |-
     Task: Please answer the multiple choice question.
 
@@ -73,7 +73,7 @@ templates:
     Options:
     {Tg_exp%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer:{%multiple_choice_result}
   - |-
     Task: Please answer the multiple choice question.
 
@@ -85,7 +85,7 @@ templates:
     Options:
     {Tg_calc%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer:{%multiple_choice_result}
   - |-
     Task: Please answer the multiple choice question.
 
@@ -96,7 +96,7 @@ templates:
     Options:
     {rho_300K_calc%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer:{%multiple_choice_result}
   - |-
     Task: Please answer the multiple choice question.
 
@@ -107,7 +107,7 @@ templates:
     Options:
     {Tg_exp%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer:{%multiple_choice_result}
   - |-
     Task: Please answer the multiple choice question.
 
@@ -119,4 +119,4 @@ templates:
     Options:
     {Tg_calc%}
 
-    Answer:<EOI>{%multiple_choice_result}
+    Answer:{%multiple_choice_result}
