@@ -3,7 +3,7 @@ description: "Human ether-à-go-go related gene (hERG) is crucial for the coordi
 targets:
   - id: herg_central_at_1uM
     description: the percent inhibition of hERG at a 1uM concentration
-    units: "%"
+    units: \%
     type: continuous
     names:
       - noun: hERG inhibition at a concentration of 1uM
@@ -28,4 +28,37 @@ links:
     description: Data source
 num_points: 306893
 bibtex:
-  - "@article{Du2011,\ndoi = {10.1089/adt.2011.0425},\nurl = {https://doi.org/10.1089/adt.2011.0425},\nyear = {2011},\nmonth = dec,\npublisher = {Mary Ann Liebert Inc},\nvolume = {9},\nnumber = {6},\npages = {580--588},\nauthor = {Fang Du and Haibo Yu and Beiyan Zou and Joseph Babcock\nand Shunyou Long and Min Li},\ntitle = {hERGCentral: A Large Database to Store,  Retrieve,  and Analyze Compound Human\nEther-à-go-go Related Gene Channel Interactions to Facilitate Cardiotoxicity Assessment in Drug Development},\njournal = {ASSAY and Drug Development Technologies}"
+  - |-
+    @article{Du2011,
+      doi = {10.1089/adt.2011.0425},
+      url = {https://doi.org/10.1089/adt.2011.0425},
+      year = {2011},
+      month = dec,
+      publisher = {Mary Ann Liebert Inc},
+      volume = {9},
+      number = {6},
+      pages = {580--588},
+      author = {Fang Du and Haibo Yu and Beiyan Zou and Joseph Babcock\nand Shunyou Long and Min Li},
+      title = {hERGCentral: A Large Database to Store,  Retrieve,  and Analyze Compound Human\nEther-à-go-go Related Gene Channel Interactions to Facilitate Cardiotoxicity Assessment in Drug Development},
+      journal = {ASSAY and Drug Development Technologies}
+    }
+templates:
+  - The {herg_central_at_1uM__names__noun} of a {#drug|compound!} with the {SMILES__description} {SMILES#} is {herg_central_at_1uM#}{herg_central_at_1uM__units}.
+  - A {#drug|compound!} with the {SMILES__description} {SMILES#} has a {herg_central_at_1uM__names__noun} of {herg_central_at_1uM#}{herg_central_at_1uM__units}.
+  - |-
+    {#Task|Problem statement!}: Answer the {#multiple choice|multiple-choice|MCQ!} question.
+    {#Question|Query!}: Which {#compound|drug!} {#has|exhibits!} a {herg_central_at_1uM#}{herg_central_at_1uM__units} {herg_central_at_1uM__names__noun}?
+    Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {SMILES%herg_central_at_1uM%}
+    Answer: {%multiple_choice_result}. {SMILES#}
+  - |-
+    User: {#I need|I want!} to know the {herg_central_at_1uM__names__noun} of a {#compound|drug!} with the {SMILES__description} {SMILES#}.
+    Assistant: The {herg_central_at_1uM__names__noun} is {herg_central_at_1uM#}{herg_central_at_1uM__units}.
+  - |-
+    {#Task|Problem statement!}: Answer the {#multiple choice|multiple-choice|MCQ!} question.
+    {#Question|Query!}: What is the {herg_central_at_1uM__names__noun} of a {#compound|drug!} with the {SMILES__description} {SMILES#}?
+    Constraint: You must return none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {herg_central_at_1uM%SMILES%}
+    Answer: {%multiple_choice_result}. {herg_central_at_1uM#}{herg_central_at_1uM__units}.
