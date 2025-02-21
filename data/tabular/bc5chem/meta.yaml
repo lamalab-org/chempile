@@ -49,6 +49,22 @@ templates:
     {#Sentence|Description!}: {sentence#}
     Answer: {matched_words#}
   - |-
-    User: Does the following text contain mentions of {#chemicals|chemical compounds|chemical substances!}?{# Can you return matches?| Can you output matches?| Please return matches.!}
+    User: Does the following text contain mentions of {#chemicals|chemical compounds|chemical substances!}?{# Can you return matches?| Can you output matches?|Please return matches!}
     {#Text: |!}{sentence#}
     Assistant: {#I found|There is!} {matched_words#}.
+  - |-
+    Task: {#Extract|Identify!} the chemical mentions in the given {sentence__names__noun}. List the chemicals found. If there is no {#match|mention of a chemical|matching entity!}, return `no match`.
+
+    {#Sentence: |Text: |!}{sentence#}
+
+    Answer: {matched_words#}
+  - |-
+    Task: {#Extract|Identify!} the chemical substances from the {sentence__names__noun} below. If there is no {#match|mention of a chemical|matching entity!}, return `no match`.
+
+    {#Sentence: |Text: |!}{sentence#}
+
+    Answer: {matched_words#}
+  - |-
+    Task: {#Please identify|Identify!} the chemical compounds in the {sentence__names__noun} provided. If there is no {#match|mention of a chemical|matching entity!}, return `no match`.
+    {#Sentence: |Text: |!}{sentence#}
+    Answer: {matched_words#}
