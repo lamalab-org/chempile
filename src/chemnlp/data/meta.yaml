@@ -28,4 +28,4 @@ templates:
   - The compound {compound_name__names__noun} with SMILES {SMILES#} can {#penetrate|not penetrate!} the blood-brain barrier.
   - The compound {compound_name__names__noun} with SMILES {SMILES#} is in the {split#} set.
   - "Question: Which of the following compounds can penetrate the blood-brain barrier?\nOptions: {%multiple_choice_enum%4%aA1}\n{compound_name%}\nAnswer: {%multiple_choice_result}"
-  - The compound with SMILES {SMILES#} can penetrate the blood-brain barrier:<EOI>{penetrate_BBB#}
+  - The compound with SMILES {SMILES#} can penetrate the blood-brain barrier:{penetrate_BBB#}
