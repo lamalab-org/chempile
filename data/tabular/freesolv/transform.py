@@ -219,8 +219,8 @@ Result:<EOI>{SMILES#}""",  # noqa: E501
         ],
     }
     fn_meta = "meta.yaml"
-    with open(fn_meta, "w") as f:
-        yaml.dump(meta, f, sort_keys=False)
+    #with open(fn_meta, "w") as f:
+        #yaml.dump(meta, f, sort_keys=False)
 
     print(f"Finished processing {meta['name']} dataset!")
 

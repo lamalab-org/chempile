@@ -158,8 +158,8 @@ def create_meta_yaml(num_points: int):
     """Create meta configuration file for the dataset"""
     # create meta yaml
     META_TEMPLATE["num_points"] = num_points
-    with open(META_YAML_PATH, "w+") as f:
-        yaml.dump(META_TEMPLATE, f, sort_keys=False)
+    # with open(META_YAML_PATH, "w+") as f:
+    #     yaml.dump(META_TEMPLATE, f, sort_keys=False)
     print(f"Finished processing chebi-20 {META_TEMPLATE['name']} dataset!")
 
 

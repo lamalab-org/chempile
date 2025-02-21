@@ -189,8 +189,8 @@ Result:<EOI>{term#}""",  # noqa
     )  # to use with safe_dump
 
     fn_meta = "meta.yaml"
-    with open(fn_meta, "w") as f:
-        yaml.dump(meta, f, sort_keys=False)
+    #with open(fn_meta, "w") as f:
+        #yaml.dump(meta, f, sort_keys=False)
 
     print(f"Finished processing {meta['name']} dataset!")
 
