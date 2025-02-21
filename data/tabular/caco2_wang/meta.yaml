@@ -54,3 +54,81 @@ bibtex:
     year={2016},
     publisher={ACS Publications}
     }
+templates:
+  - The molecule with the {SMILES__description} {#representation of |!}{SMILES#} has a {permeability__names__noun} of {permeability#} {permeability__units}.
+  - Based on the {SMILES__description} {#representation |!}{SMILES#}, the molecule has a {permeability__names__noun} of {permeability#} {permeability__units}.
+  - The {SMILES__description} {SMILES#} {#represents|is from!} a molecule with a {permeability__names__noun} of {permeability#} {permeability__units}.
+  - The {#molecule |!}{SMILES__description} {SMILES#} has a {permeability__names__noun} of {permeability#} {permeability__units}.
+  - |-
+    Task: Please predict a property for a molecule based on the description.
+    Description: Predict the {permeability__names__noun}.
+    {#Molecule |!}{SMILES__description}: {SMILES#}
+    Constraint: You must provide a numerical estimate in units of {permeability__units}.
+    Result: {permeability#}
+  - |-
+    Task: Please predict a property for a molecule based on the description.
+    Description: Predict the {permeability__names__noun}.
+    {#Molecule |!}{SMILES__description}: {SMILES#}
+    Constraint: Answer the question in a {#full|complete!} sentence.
+    Result: This molecule has a {permeability__names__noun} of {permeability#} {permeability__units}.
+  - |-
+    Task: Please {#give me|create|generate!} a {#molecule |!}{SMILES__description} based on the {#text |!}description{# below|!}.
+    Description: A molecule with a {permeability__names__noun} of approximately {permeability#} {permeability__units}.
+    Result: {SMILES#}
+  - |-
+    User: Can you {#tell me|derive|estimate!} the {permeability__names__noun} for the molecule with the {SMILES__description} {SMILES#}?
+    Assistant: Based on my analysis, the {permeability__names__noun} for this molecule is approximately {permeability#} {permeability__units}.
+  - |-
+    User: What is the {permeability__names__noun} value for the molecule with the {SMILES__description} {SMILES#}?
+    Assistant: The {permeability__names__noun} value for this molecule is approximately {permeability#} {permeability__units}.
+  - |-
+    User: Can you {#give me|create|generate!} the {SMILES__description} of a molecule that has a {permeability__names__noun} value of approximately {permeability#} {permeability__units}?
+    Assistant: {#Yes|Of course|Sure|Yes, I'm happy to help!}, here you go: {SMILES#}
+  - |-
+    User: I'm {#searching|looking!} for the {SMILES__description} of a molecule with a {permeability__names__noun} value close to {permeability#} {permeability__units}.
+    Assistant: This molecule has a {permeability__names__noun} value of approximately {permeability#} {permeability__units}: {SMILES#}
+  - |-
+    User: I want to {#come up with|create|generate!} a {#molecule |!}{SMILES__description}.
+    Assistant: {#This sounds very exciting. |This sounds very interesting. !}Should I consider any {#constraints|specific points!} for the {#generation|creation!}?
+    User: Yes, please. The molecule should have a {permeability__names__noun} value of approximately {permeability#} {permeability__units}.
+    Assistant: {#Ok|Got it!},{# here you go,|!} this {SMILES__description} has a {permeability__names__noun} value of approximately {permeability#} {permeability__units}: {SMILES#}
+  - |-
+    User: I want to {#come up with|create|generate!} a {#molecule |!}{SMILES__description}.
+    Assistant: {#This sounds very exciting. |This sounds very interesting. !}Should it be a special {#molecule|one!}?
+    User: Yes, the molecule should have a {permeability__names__noun} value close to {permeability#} {permeability__units}.
+    Assistant: {#Understood|Got it|Ok!}, this {SMILES__description} has a {permeability__names__noun} value of approximately {permeability#} {permeability__units}: {SMILES#}
+  - What is the {permeability__names__noun} value for the {SMILES__description} {SMILES#}:{permeability#}
+  - |-
+    Task: Please predict a property for a molecule based on the description.
+    Description: Predict the {permeability__names__noun}.
+    {#Molecule |!}{SMILES__description}: {SMILES#}
+    Constraint: You must provide a numerical estimate in units of {permeability__units}.
+    Result:{permeability#}
+  - |-
+    Task: Please answer the multiple choice question.
+    Question: Which molecule has the highest {permeability__names__noun}?
+    Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {SMILES%permeability%}
+    Answer: {%multiple_choice_result}
+  - |-
+    Task: Please answer the multiple choice question.
+    Question: Which molecule has the highest {permeability__names__noun}?
+    Constraint: Even if you are {#uncertain|not sure!}, you must pick either {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {SMILES%permeability%}
+    Answer:{%multiple_choice_result}
+  - |-
+    Task: Please answer the multiple choice question.
+    Question: Rank these molecules from lowest to highest {permeability__names__noun}.
+    Constraint: You must select all options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {SMILES%permeability%}
+    Answer: {%multiple_choice_result}
+  - |-
+    Task: Please answer the multiple choice question.
+    Question: Rank these molecules from lowest to highest {permeability__names__noun}.
+    Constraint: You must select all options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {SMILES%permeability%}
+    Answer:{%multiple_choice_result}
