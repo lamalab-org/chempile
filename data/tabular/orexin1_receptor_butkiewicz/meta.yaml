@@ -174,3 +174,4 @@ templates:
     Options:
     {SMILES%activity_orexin1%}
     Answer: {%multiple_choice_result}
+

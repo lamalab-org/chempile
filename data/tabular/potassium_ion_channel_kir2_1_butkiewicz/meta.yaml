@@ -160,6 +160,7 @@ templates:
     Options:
     {activity_potassium_ion_channel%}
     Answer: {%multiple_choice_result}
+
   - |-
     Task: Please answer the multiple choice question.
     Question: Which molecules are {activity_potassium_ion_channel#not &NULL}{activity_potassium_ion_channel__names__adjective}?
@@ -167,3 +168,11 @@ templates:
     Options:
     {SMILES%activity_potassium_ion_channel%}
     Answer: {%multiple_choice_result}
+  - |-
+    Task: Please answer the multiple choice question.
+    Question: Which molecules are {activity_potassium_ion_channel#not &NULL}{activity_potassium_ion_channel__names__adjective}?
+    Constraint: You must select none, one or more options from {%multiple_choice_enum%2-5%aA1} without using any {#other|additional!} words.
+    Options:
+    {SMILES%activity_potassium_ion_channel%}
+    Answer: {%multiple_choice_result}
+
