@@ -43,7 +43,8 @@ def process():
 
     df = pd.concat([df_train, df_val])
     df["text"] = df["text"].apply(uniCode2Latex)
-    print(len(df))
+    # drop split column
+    df = df.drop(columns=["split"])
     df.to_csv("data_clean.csv", index=False)
 
 

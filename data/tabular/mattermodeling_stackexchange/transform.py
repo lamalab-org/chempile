@@ -82,6 +82,8 @@ def get_clean_df():
     # we then create a dataframe from the list of questions and answers
     df_qa = pd.DataFrame(questions_w_answer, columns=["title", "q", "a"])
     print(len(df_qa))
+    # drop split column
+    df_qa = df_qa.drop(columns=["split"])
     df_qa.to_csv("data_clean.csv", index=False)
 
 
