@@ -22,7 +22,7 @@ dataset_creation = [
   "bioc",
   "pylatexenc",
   "canonicalize_psmiles@git+https://github.com/Ramprasad-Group/canonicalize_psmiles.git",
-  "chemcaption@git+https://github.com/lamalab-org/chem-caption.git
+  "chemcaption@git+https://github.com/lamalab-org/chem-caption.git",
   "rxn-chem-utils",
   "backoff",
   "givemeconformer",
