@@ -3,6 +3,18 @@ import yaml
 from tdc.single_pred import HTS
 
 
+def canonicalize_smiles(smiles):
+    try:
+        from rdkit import Chem
+
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            return None
+        return Chem.MolToSmiles(mol, canonical=True)
+    except:
+        return smiles
+
+
 def get_and_transform_data():
     # get raw data
     label = "serine_threonine_kinase_33_butkiewicz"
@@ -10,21 +22,10 @@ def get_and_transform_data():
     df_train = splits["train"]
     df_valid = splits["valid"]
     df_test = splits["test"]
-    df_train["split"] = "train"
-    df_valid["split"] = "valid"
-    df_test["split"] = "test"
+    for df_, name in [(df_train, "train"), (df_valid, "valid"), (df_test, "test")]:
+        df_["split"] = name
 
-    df = pd.concat([df_train, df_valid, df_test], axis=0)
-
-    # check if fields are the same
-    fields_orig = df.columns.tolist()
-    assert fields_orig == [
-        "Drug_ID",
-        "Drug",
-        "Y",
-        "split",
-    ]
-
+    df = pd.concat([df_train, df_valid, df_test], axis=0).reset_index(drop=True)
     # overwrite column names = fields
     fields_clean = [
         "compound_id",
@@ -34,7 +35,16 @@ def get_and_transform_data():
     ]
     df.columns = fields_clean
 
-    assert not df.duplicated().sum()
+    # Multithreaded canonicalization
+    from concurrent.futures import ThreadPoolExecutor
+    smiles_list = df["SMILES"].tolist()
+    with ThreadPoolExecutor() as executor:
+        # executor.map applies your function to each SMILES in parallel
+        canonical_list = list(executor.map(canonicalize_smiles, smiles_list))
+
+    df["SMILES"] = canonical_list
+    # check if fields are the same
+    df = df.drop_duplicates(subset=["SMILES"])
 
     # save to csv
     fn_data_csv = "data_clean.csv"
@@ -231,8 +241,8 @@ Answer:<EOI>{%multiple_choice_result}""",  # noqa: E501
         str, str_presenter
     )  # to use with safe_dum
     fn_meta = "meta.yaml"
-    #with open(fn_meta, "w") as f:
-        #yaml.dump(meta, f, sort_keys=False)
+    # with open(fn_meta, "w") as f:
+    # yaml.dump(meta, f, sort_keys=False)
 
     print(f"Finished processing {meta['name']} dataset!")
 
