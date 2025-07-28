@@ -94,43 +94,52 @@ ENGAGING_PROMPTS = [
 ]
 
 
-def prepare_jsonl_file(df: pd.DataFrame, dset: str):
+def prepare_jsonl_file(split_dfs: dict, dset: str):
     import random
 
     tasks = []
     prompt_sets = [HARD_PROMPTS, WIKI_PROMPTS, ENGAGING_PROMPTS, ""]
+    prompt_types = ["hard", "wiki", "engaging", "none"]
     weights = [0.1, 0.3, 0.3, 0.3]
-    for i, row in df.iterrows():
-        text = row["text"]
-        chosen_set = random.choices(prompt_sets, weights=weights, k=1)[0]
-        if isinstance(chosen_set, list):
-            user_prompt = random.choice(chosen_set)
-        else:
-            user_prompt = ""
-        prompt_text = f"{user_prompt}. " if user_prompt else ""
-        task = {
-            "custom_id": f"task-{dset}-{i}",
-            "method": "POST",
-            "url": "/v1/chat/completions",
-            "body": {
-                "model": "gpt-4o-mini-2024-07-18",
-                "messages": [
-                    {"role": "system", "content": SYSTEM_PROMPT},
-                    {
-                        "role": "user",
-                        "content": f"{prompt_text}\nOriginal text:\n{text}\n\nNow, rephrase this text into a multi-turn conversation about chemistry.",
-                    },
-                ],
-                "response_format": {
-                    "type": "json_schema",
-                    "json_schema": {
-                        "name": "multi_turn_conversation",
-                        "schema": CONVERSATION_SCHEMA,
+
+    for split_name, df in split_dfs.items():
+        for i, row in df.iterrows():
+            text = row["text"]
+            chosen_set_idx = random.choices(
+                range(len(prompt_sets)), weights=weights, k=1
+            )[0]
+            chosen_set = prompt_sets[chosen_set_idx]
+            prompt_type = prompt_types[chosen_set_idx]
+
+            if isinstance(chosen_set, list):
+                user_prompt = random.choice(chosen_set)
+            else:
+                user_prompt = ""
+            prompt_text = f"{user_prompt}. " if user_prompt else ""
+            task = {
+                "custom_id": f"task-{dset}-{split_name}-{i}-{prompt_type}",
+                "method": "POST",
+                "url": "/v1/chat/completions",
+                "body": {
+                    "model": "gpt-4o-mini-2024-07-18",
+                    "messages": [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {
+                            "role": "user",
+                            "content": f"{prompt_text}\nOriginal text:\n{text}\n\nNow, rephrase this text into a multi-turn conversation about chemistry.",
+                        },
+                    ],
+                    "response_format": {
+                        "type": "json_schema",
+                        "json_schema": {
+                            "name": "multi_turn_conversation",
+                            "schema": CONVERSATION_SCHEMA,
+                        },
                     },
                 },
-            },
-        }
-        tasks.append(task)
+            }
+            tasks.append(task)
+
     f_name = f"{dset}.jsonl"
     with open(f_name, "w") as f:
         for task in tasks:
@@ -179,42 +188,55 @@ def make_batch_call(f_name: str):
 
 
 def load_and_save_data(dset):
-    all_rows = []
+    split_collections = {}  # Dictionary to hold DataFrames by split
     logger.info(f"Loading dataset {dset}")
     configs = get_dataset_config_names(dset)
+
     for config in configs:
         if config != "spectra_reasoning_deepseek-default":
-            logger.info(f"Loading dataset {dset} with config {config}")
+            logger.info(f"Skipping config {config}")
             continue
         logger.info(f"Loading dataset {dset} with config {config}")
         data = load_dataset(dset, config)
+
         for split_name, split_data in data.items():
-            # Convert split_data to pandas DataFrame and collect rows
+            # Convert split_data to pandas DataFrame
             df = pd.DataFrame(split_data)
             if "text" in df.columns:
-                # Add metadata column with original config and split info
+                # Add metadata columns with original config and split info
                 df = df[["text"]].copy()
                 df["original_config"] = config
                 df["original_dataset"] = dset
                 df["original_split"] = split_name
-                all_rows.append(df)
+
+                # Collect DataFrames by split name
+                if split_name not in split_collections:
+                    split_collections[split_name] = []
+                split_collections[split_name].append(df)
             else:
                 # If 'text' column is missing, skip or handle as needed
                 continue
-    # Concatenate all DataFrames and reset index to ensure continuous indexing
-    big_df = pd.concat(all_rows, ignore_index=True)
-    return big_df
+
+    # Concatenate DataFrames for each split separately
+    final_split_dfs = {}
+    for split_name, dfs_list in split_collections.items():
+        combined_df = pd.concat(dfs_list, ignore_index=True)
+        final_split_dfs[split_name] = combined_df
+        logger.info(f"Split '{split_name}': {len(combined_df)} samples")
+
+    return final_split_dfs
 
 
-def process_and_upload_data(output_file, dset, hf_token, original_df):
-    results = []
+def process_and_upload_data(output_file, dset, hf_token, original_split_dfs):
+    # Dictionary to hold results by split
+    split_results = {}
 
     with open(output_file, "rb") as f:
         for line in f:
             # Parse the JSON string into a Python dictionary
             json_object = json.loads(line.strip())
 
-            # Extract custom_id to get the original row index
+            # Extract custom_id to get the original row index and split
             custom_id = json_object.get("custom_id", "")
 
             # Extract the relevant part from the JSON object
@@ -230,20 +252,28 @@ def process_and_upload_data(output_file, dset, hf_token, original_df):
                     first_tag = parsed_content.get("first_tag") or None
                     second_tag = parsed_content.get("second_tag") or None
 
-                    # Extract row index from custom_id (format: "task-{dset}-{i}")
+                    # Extract split name, row index, and prompt type from custom_id
+                    # (format: "task-{dset}-{split_name}-{i}-{prompt_type}")
                     try:
-                        row_index = int(custom_id.split("-")[-1])
-                        original_row = original_df.iloc[row_index]
+                        parts = custom_id.split("-")
+                        prompt_type = parts[-1]  # Last part is prompt type
+                        row_index = int(parts[-2])  # Second to last part is row index
+                        split_name = parts[-3]  # Third to last part is split name
+
+                        # Get original row from the corresponding split DataFrame
+                        original_row = original_split_dfs[split_name].iloc[row_index]
                         origin = {
                             "dataset": original_row["original_dataset"],
                             "config": original_row["original_config"],
                             "split": original_row["original_split"],
+                            "prompt_type": prompt_type,  # Add prompt type to origin metadata
                         }
-                    except (ValueError, IndexError, KeyError):
+                    except (ValueError, IndexError, KeyError) as e:
                         logger.warning(
-                            f"Could not extract origin for custom_id: {custom_id}"
+                            f"Could not extract origin for custom_id: {custom_id}, error: {e}"
                         )
                         origin = None
+                        split_name = "unknown"
 
                     # Create the conversation using the parsed content
                     conversation_data = {
@@ -259,45 +289,37 @@ def process_and_upload_data(output_file, dset, hf_token, original_df):
                         ],
                     }
 
-                    # Attempt to create a Conversation instance from the parsed data
-                    # Note: We don't validate with Pydantic here since we're adding the origin field
-                    results.append(conversation_data)
+                    # Add to the appropriate split
+                    if split_name not in split_results:
+                        split_results[split_name] = []
+                    split_results[split_name].append(conversation_data)
+
                 except json.JSONDecodeError as e:
                     logger.error(f"Error decoding content JSON: {e}")
                 except Exception as e:
                     logger.error(f"Error processing conversation data: {e}")
 
-    # Convert the results list into a Hugging Face Dataset
-    full_dataset = Dataset.from_dict(
-        {
-            "first_tag": [conv["first_tag"] for conv in results],
-            "second_tag": [conv["second_tag"] for conv in results],
-            "origin": [conv["origin"] for conv in results],
-            "messages": [conv["messages"] for conv in results],
-        }
-    )
+    # Convert each split's results into Hugging Face Datasets
+    datasets_by_split = {}
+    for split_name, results in split_results.items():
+        if results:  # Only create dataset if there are results
+            split_dataset = Dataset.from_dict(
+                {
+                    "first_tag": [conv["first_tag"] for conv in results],
+                    "second_tag": [conv["second_tag"] for conv in results],
+                    "origin": [conv["origin"] for conv in results],
+                    "messages": [conv["messages"] for conv in results],
+                }
+            )
+            datasets_by_split[split_name] = split_dataset
+            logger.info(f"Split '{split_name}': {len(split_dataset)} samples")
 
-    # Split the dataset into train/val/test (90/5/5)
-    logger.info(f"Total samples: {len(full_dataset)}")
+    # Create DatasetDict with preserved splits
+    dataset_dict = DatasetDict(datasets_by_split)
 
-    # First split: 90% train, 10% temp (for val+test)
-    train_test_split = full_dataset.train_test_split(test_size=0.1, seed=42)
-    train_dataset = train_test_split["train"]
-    temp_dataset = train_test_split["test"]
-
-    # Second split: split the 10% into 5% val and 5% test
-    val_test_split = temp_dataset.train_test_split(test_size=0.5, seed=42)
-    val_dataset = val_test_split["train"]
-    test_dataset = val_test_split["test"]
-
-    # Create DatasetDict with splits
-    dataset_dict = DatasetDict(
-        {"train": train_dataset, "val": val_dataset, "test": test_dataset}
-    )
-
-    logger.info(f"Train samples: {len(train_dataset)}")
-    logger.info(f"Validation samples: {len(val_dataset)}")
-    logger.info(f"Test samples: {len(test_dataset)}")
+    # Log the final split sizes
+    for split_name, dataset in dataset_dict.items():
+        logger.info(f"Final {split_name} samples: {len(dataset)}")
 
     # Upload to Hugging Face Hub
     try:
@@ -318,11 +340,9 @@ def process_and_upload_data(output_file, dset, hf_token, original_df):
 
 def main():
     """
-    Main function to create, combine, and upload the dataset.
-
-    This function orchestrates the sampling of chemistry and Gutenberg data,
-    combines them, shuffles the resulting dataset, and uploads it to the
-    Hugging Face Hub.
+    Main function to load the dataset, prepare the JSONL file,
+    make batch calls to the OpenAI API, process the results,
+    and upload the final dataset to the Hugging Face Hub.
     """
     dataset = "chempile-reasoning"
     full_dset_name = f"jablonkagroup/{dataset}"
@@ -335,10 +355,10 @@ def main():
             "Hugging Face token not found. Please add it to the ../.env file."
         )
 
-    df = load_and_save_data(full_dset_name)
-    input_file = prepare_jsonl_file(df, dataset)
+    split_dfs = load_and_save_data(full_dset_name)
+    input_file = prepare_jsonl_file(split_dfs, dataset)
     output_file = make_batch_call(input_file)
-    success = process_and_upload_data(output_file, dataset, hf_token, df)
+    success = process_and_upload_data(output_file, dataset, hf_token, split_dfs)
     if success:
         logger.info("Data processing and upload completed successfully.")
     else:
