@@ -8,6 +8,9 @@ from pydantic import BaseModel, Field
 from typing import Literal, Optional
 import pandas as pd
 from loguru import logger
+import math
+
+load_dotenv("../.env")
 
 client = OpenAI()
 
@@ -93,8 +96,14 @@ ENGAGING_PROMPTS = [
     "Utilize an engaging, direct style that appeals to a wide range of readers while retaining intellectual rigor",
 ]
 
+MAX_TASKS_PER_FILE = 10000
 
-def prepare_jsonl_file(split_dfs: dict, dset: str):
+
+def prepare_jsonl_files(split_dfs: dict, dset: str):
+    """
+    Prepare JSONL files, splitting into chunks of MAX_TASKS_PER_FILE tasks each.
+    Returns a list of file names.
+    """
     import random
 
     tasks = []
@@ -140,51 +149,129 @@ def prepare_jsonl_file(split_dfs: dict, dset: str):
             }
             tasks.append(task)
 
-    f_name = f"{dset}.jsonl"
-    with open(f_name, "w") as f:
-        for task in tasks:
-            f.write(json.dumps(task) + "\n")
+    # Split tasks into chunks
+    total_tasks = len(tasks)
+    num_files = math.ceil(total_tasks / MAX_TASKS_PER_FILE)
 
-    return f_name
-
-
-def make_batch_call(f_name: str):
-    # Open file in binary mode for upload
-    with open(f_name, "rb") as f:
-        batch_file = client.files.create(file=f, purpose="batch")
-    batch_job = client.batches.create(
-        input_file_id=batch_file.id,
-        endpoint="/v1/chat/completions",
-        completion_window="24h",
+    logger.info(f"Total tasks: {total_tasks}")
+    logger.info(
+        f"Splitting into {num_files} files of max {MAX_TASKS_PER_FILE} tasks each"
     )
-    batch_job = client.batches.retrieve(batch_job.id)
-    while batch_job.status != "completed":
-        batch_job = client.batches.retrieve(batch_job.id)
-        logger.info(f"Batch job status: {batch_job.status}")
-        if batch_job.status == "failed":
-            logger.error("Batch job failed")
-            raise Exception("Batch job failed")
-        elif batch_job.status == "running":
-            logger.info("Batch job is still running...")
-        elif batch_job.status == "cancelled":
-            logger.error("Batch job was cancelled")
-        logger.info("Waiting for batch job to complete...")
-        time.sleep(300)  # Wait
-        logger.info("Checking batch job status...")
 
-    result_file_id = batch_job.output_file_id
-    logger.info(f"Batch job completed. Result file ID: {result_file_id}")
+    file_names = []
+    for file_idx in range(num_files):
+        start_idx = file_idx * MAX_TASKS_PER_FILE
+        end_idx = min((file_idx + 1) * MAX_TASKS_PER_FILE, total_tasks)
+        chunk_tasks = tasks[start_idx:end_idx]
 
-    result = client.files.content(result_file_id)
-    result = result.content
+        f_name = f"{dset}_part_{file_idx + 1}_of_{num_files}.jsonl"
+        with open(f_name, "w") as f:
+            for task in chunk_tasks:
+                f.write(json.dumps(task) + "\n")
 
-    output_file = f_name.replace(".jsonl", "_output.jsonl")
-    logger.info(f"Saving output to {output_file}")
-    with open(output_file, "wb") as f:
-        f.write(result)
-    logger.info("Output saved successfully.")
+        file_names.append(f_name)
+        logger.info(f"Created {f_name} with {len(chunk_tasks)} tasks")
 
-    return output_file
+    return file_names
+
+
+def make_batch_calls(file_names: list):
+    """
+    Submit all batch jobs and return their job IDs and corresponding file names.
+    """
+    batch_jobs = []
+
+    # Submit all batch jobs
+    for f_name in file_names:
+        logger.info(f"Submitting batch job for {f_name}")
+        with open(f_name, "rb") as f:
+            batch_file = client.files.create(file=f, purpose="batch")
+
+        batch_job = client.batches.create(
+            input_file_id=batch_file.id,
+            endpoint="/v1/chat/completions",
+            completion_window="24h",
+        )
+
+        batch_jobs.append(
+            {"job_id": batch_job.id, "input_file": f_name, "status": "submitted"}
+        )
+        logger.info(f"Submitted batch job {batch_job.id} for {f_name}")
+
+    # Wait for all jobs to complete
+    completed_jobs = []
+    while len(completed_jobs) < len(batch_jobs):
+        for job_info in batch_jobs:
+            if job_info["status"] != "completed":
+                batch_job = client.batches.retrieve(job_info["job_id"])
+                job_info["status"] = batch_job.status
+
+                if batch_job.status == "completed":
+                    result_file_id = batch_job.output_file_id
+                    logger.info(
+                        f"Batch job {job_info['job_id']} completed. Result file ID: {result_file_id}"
+                    )
+
+                    result = client.files.content(result_file_id)
+                    result = result.content
+
+                    output_file = job_info["input_file"].replace(
+                        ".jsonl", "_output.jsonl"
+                    )
+                    logger.info(f"Saving output to {output_file}")
+                    with open(output_file, "wb") as f:
+                        f.write(result)
+                    logger.info("Output saved successfully.")
+
+                    completed_jobs.append(
+                        {
+                            "input_file": job_info["input_file"],
+                            "output_file": output_file,
+                            "job_id": job_info["job_id"],
+                        }
+                    )
+
+                elif batch_job.status == "failed":
+                    logger.error(f"Batch job {job_info['job_id']} failed")
+                    raise Exception(f"Batch job {job_info['job_id']} failed")
+                elif batch_job.status == "cancelled":
+                    logger.error(f"Batch job {job_info['job_id']} was cancelled")
+                    raise Exception(f"Batch job {job_info['job_id']} was cancelled")
+                elif batch_job.status == "running":
+                    logger.info(f"Batch job {job_info['job_id']} is still running...")
+
+        # Show progress
+        completed_count = len(completed_jobs)
+        total_count = len(batch_jobs)
+        logger.info(f"Progress: {completed_count}/{total_count} batch jobs completed")
+
+        if completed_count < total_count:
+            logger.info("Waiting for remaining batch jobs to complete...")
+            time.sleep(1200)  # Wait 20 minutes before checking again
+            logger.info("Checking batch job statuses...")
+
+    return completed_jobs
+
+
+def concatenate_output_files(completed_jobs: list, dset: str):
+    """
+    Concatenate all output files into a single file.
+    """
+    combined_output_file = f"{dset}_combined_output.jsonl"
+
+    logger.info(
+        f"Concatenating {len(completed_jobs)} output files into {combined_output_file}"
+    )
+
+    with open(combined_output_file, "wb") as outfile:
+        for job_info in completed_jobs:
+            output_file = job_info["output_file"]
+            logger.info(f"Adding content from {output_file}")
+            with open(output_file, "rb") as infile:
+                outfile.write(infile.read())
+
+    logger.info(f"Combined output saved to {combined_output_file}")
+    return combined_output_file
 
 
 def load_and_save_data(dset):
@@ -193,9 +280,6 @@ def load_and_save_data(dset):
     configs = get_dataset_config_names(dset)
 
     for config in configs:
-        if config != "spectra_reasoning_deepseek-default":
-            logger.info(f"Skipping config {config}")
-            continue
         logger.info(f"Loading dataset {dset} with config {config}")
         data = load_dataset(dset, config)
 
@@ -227,92 +311,416 @@ def load_and_save_data(dset):
     return final_split_dfs
 
 
+# Add this function before the dataset creation part of your code
+
+
+def validate_and_normalize_data(results, split_name):
+    """
+    Validate and normalize all data fields to ensure consistent types for PyArrow
+    """
+    normalized_results = []
+    validation_errors = 0
+
+    for i, conv in enumerate(results):
+        try:
+            # Validate and normalize first_tag
+            first_tag = conv.get("first_tag")
+            if first_tag is None:
+                first_tag = []
+            elif isinstance(first_tag, str):
+                first_tag = [first_tag]
+            elif isinstance(first_tag, list):
+                # Ensure all elements are strings
+                first_tag = [
+                    str(item) if item is not None else "" for item in first_tag
+                ]
+            else:
+                logger.warning(
+                    f"Invalid first_tag type for split {split_name}, item {i}: {type(first_tag)}. Converting to empty list."
+                )
+                first_tag = []
+
+            # Validate and normalize second_tag
+            second_tag = conv.get("second_tag")
+            if second_tag is None:
+                second_tag = []
+            elif isinstance(second_tag, str):
+                second_tag = [second_tag]
+            elif isinstance(second_tag, list):
+                # Ensure all elements are strings
+                second_tag = [
+                    str(item) if item is not None else "" for item in second_tag
+                ]
+            else:
+                logger.warning(
+                    f"Invalid second_tag type for split {split_name}, item {i}: {type(second_tag)}. Converting to empty list."
+                )
+                second_tag = []
+
+            # Validate and normalize origin
+            origin = conv.get("origin")
+            if origin is None or not isinstance(origin, dict):
+                origin = {"dataset": "", "config": "", "split": "", "prompt_type": ""}
+            else:
+                # Ensure all origin fields are strings
+                origin = {
+                    "dataset": (
+                        str(origin.get("dataset", ""))
+                        if origin.get("dataset") is not None
+                        else ""
+                    ),
+                    "config": (
+                        str(origin.get("config", ""))
+                        if origin.get("config") is not None
+                        else ""
+                    ),
+                    "split": (
+                        str(origin.get("split", ""))
+                        if origin.get("split") is not None
+                        else ""
+                    ),
+                    "prompt_type": (
+                        str(origin.get("prompt_type", ""))
+                        if origin.get("prompt_type") is not None
+                        else ""
+                    ),
+                }
+
+            # Validate and normalize messages
+            messages = conv.get("messages", [])
+            if not isinstance(messages, list):
+                logger.warning(
+                    f"Messages is not a list for split {split_name}, item {i}. Converting: {type(messages)}"
+                )
+                messages = []
+            else:
+                # Normalize each message
+                normalized_messages = []
+                for j, msg in enumerate(messages):
+                    if not isinstance(msg, dict):
+                        logger.warning(
+                            f"Message {j} is not a dict for split {split_name}, item {i}. Converting: {type(msg)}"
+                        )
+                        normalized_msg = {
+                            "role": "unknown",
+                            "content": str(msg) if msg is not None else "",
+                        }
+                    else:
+                        normalized_msg = {
+                            "role": (
+                                str(msg.get("role", "unknown"))
+                                if msg.get("role") is not None
+                                else "unknown"
+                            ),
+                            "content": (
+                                str(msg.get("content", ""))
+                                if msg.get("content") is not None
+                                else ""
+                            ),
+                        }
+                    normalized_messages.append(normalized_msg)
+                messages = normalized_messages
+
+            # Create normalized conversation data
+            normalized_conv = {
+                "first_tag": first_tag,
+                "second_tag": second_tag,
+                "origin": origin,
+                "messages": messages,
+            }
+
+            normalized_results.append(normalized_conv)
+
+        except Exception as e:
+            logger.error(f"Error validating item {i} in split {split_name}: {e}")
+            validation_errors += 1
+            continue
+
+    logger.info(
+        f"Split '{split_name}': Validated {len(normalized_results)} items, {validation_errors} validation errors"
+    )
+    return normalized_results
+
+
 def process_and_upload_data(output_file, dset, hf_token, original_split_dfs):
     # Dictionary to hold results by split
     split_results = {}
+    error_count = 0
+    success_count = 0
 
     with open(output_file, "rb") as f:
-        for line in f:
-            # Parse the JSON string into a Python dictionary
-            json_object = json.loads(line.strip())
+        for line_num, line in enumerate(f):
+            logger.debug(f"Processing line {line_num}")
+            try:
+                json_object = json.loads(line.strip())
+            except Exception as e:
+                logger.error(f"Error decoding line {line_num} as JSON: {e}")
+                error_count += 1
+                continue
 
-            # Extract custom_id to get the original row index and split
             custom_id = json_object.get("custom_id", "")
+            logger.debug(f"custom_id: {custom_id}")
 
-            # Extract the relevant part from the JSON object
             choices = json_object.get("response", {}).get("body", {}).get("choices", [])
 
             if choices:
                 message_content = choices[0].get("message", {}).get("content", "")
+                logger.debug(f"Processing message_content for custom_id: {custom_id}")
 
-                # Parse the message content (it is a stringified JSON)
                 try:
+                    # Try to parse the JSON content
                     parsed_content = json.loads(message_content)
+                    logger.debug(
+                        f"Successfully parsed JSON content for custom_id: {custom_id}"
+                    )
 
-                    first_tag = parsed_content.get("first_tag") or None
-                    second_tag = parsed_content.get("second_tag") or None
+                    # Validate that parsed_content is a dictionary
+                    if not isinstance(parsed_content, dict):
+                        logger.error(
+                            f"Parsed content is not a dictionary for custom_id: {custom_id}. Type: {type(parsed_content)}"
+                        )
+                        error_count += 1
+                        continue
 
-                    # Extract split name, row index, and prompt type from custom_id
-                    # (format: "task-{dset}-{split_name}-{i}-{prompt_type}")
+                    # Handle different key naming conventions (both 'first_tag'/'First Tag' formats)
+                    first_tag = parsed_content.get("first_tag") or parsed_content.get(
+                        "First Tag"
+                    )
+                    second_tag = parsed_content.get("second_tag") or parsed_content.get(
+                        "Second Tag"
+                    )
+
+                    # Ensure first_tag and second_tag are always lists or None
+                    if first_tag is None:
+                        first_tag = None
+                    elif not isinstance(first_tag, list):
+                        first_tag = [first_tag]
+
+                    if second_tag is None:
+                        second_tag = None
+                    elif not isinstance(second_tag, list):
+                        second_tag = [second_tag]
+
+                    # Extract origin information
                     try:
                         parts = custom_id.split("-")
-                        prompt_type = parts[-1]  # Last part is prompt type
-                        row_index = int(parts[-2])  # Second to last part is row index
-                        split_name = parts[-3]  # Third to last part is split name
+                        if len(parts) < 3:
+                            raise ValueError(f"custom_id format invalid: {custom_id}")
 
-                        # Get original row from the corresponding split DataFrame
+                        prompt_type = parts[-1]
+                        row_index = int(parts[-2])
+                        split_name = parts[-3]
+                        logger.debug(
+                            f"split_name: {split_name}, row_index: {row_index}, prompt_type: {prompt_type}"
+                        )
+
+                        if split_name not in original_split_dfs:
+                            raise KeyError(
+                                f"Split '{split_name}' not found in original_split_dfs"
+                            )
+
+                        if row_index >= len(original_split_dfs[split_name]):
+                            raise IndexError(
+                                f"Row index {row_index} out of bounds for split '{split_name}'"
+                            )
+
                         original_row = original_split_dfs[split_name].iloc[row_index]
                         origin = {
                             "dataset": original_row["original_dataset"],
                             "config": original_row["original_config"],
                             "split": original_row["original_split"],
-                            "prompt_type": prompt_type,  # Add prompt type to origin metadata
+                            "prompt_type": prompt_type,
                         }
                     except (ValueError, IndexError, KeyError) as e:
                         logger.warning(
                             f"Could not extract origin for custom_id: {custom_id}, error: {e}"
                         )
-                        origin = None
+                        origin = {
+                            "dataset": None,
+                            "config": None,
+                            "split": None,
+                            "prompt_type": None,
+                        }  # Use consistent dict structure instead of None
                         split_name = "unknown"
 
-                    # Create the conversation using the parsed content
+                    # Extract and validate messages (handle different key naming conventions)
+                    messages = parsed_content.get("messages", []) or parsed_content.get(
+                        "Messages", []
+                    )
+
+                    # Detailed validation of messages
+                    if not isinstance(messages, list):
+                        logger.error(
+                            f"Messages field is not a list for custom_id: {custom_id}. Type: {type(messages)}, Value: {str(messages)[:200]}..."
+                        )
+                        error_count += 1
+                        continue
+
+                    if not messages:
+                        logger.error(
+                            f"No messages found for custom_id: {custom_id} at line {line_num}"
+                        )
+                        logger.error(
+                            f"Parsed content keys: {list(parsed_content.keys())}"
+                        )
+                        logger.error(
+                            f"Full parsed content (first 500 chars): {str(parsed_content)[:500]}..."
+                        )
+                        error_count += 1
+                        continue
+
+                    # Validate each message in the list
+                    valid_messages = []
+                    for i, msg in enumerate(messages):
+                        if not isinstance(msg, dict):
+                            logger.warning(
+                                f"Message {i} is not a dict for custom_id: {custom_id}. Converting: {msg}"
+                            )
+                            # Try to convert non-dict messages to a reasonable format
+                            valid_messages.append(
+                                {"role": "unknown", "content": str(msg)}
+                            )
+                        else:
+                            valid_messages.append(
+                                {
+                                    "role": msg.get("role", "unknown"),
+                                    "content": msg.get("content", ""),
+                                }
+                            )
+
                     conversation_data = {
                         "first_tag": first_tag,
                         "second_tag": second_tag,
                         "origin": origin,
-                        "messages": [
-                            {
-                                "role": msg.get("role", ""),
-                                "content": msg.get("content", ""),
-                            }
-                            for msg in parsed_content.get("messages", [])
-                        ],
+                        "messages": valid_messages,
                     }
 
-                    # Add to the appropriate split
+                    logger.debug(
+                        f"Successfully processed conversation_data for split {split_name}"
+                    )
+
                     if split_name not in split_results:
                         split_results[split_name] = []
                     split_results[split_name].append(conversation_data)
+                    success_count += 1
 
                 except json.JSONDecodeError as e:
-                    logger.error(f"Error decoding content JSON: {e}")
+                    logger.error(
+                        f"JSON decode error for custom_id: {custom_id} at line {line_num}"
+                    )
+                    logger.error(f"JSON error: {e}")
+                    logger.error(
+                        f"Problematic content (first 300 chars): {message_content[:300]}..."
+                    )
+                    # Try to identify common JSON issues
+                    if "'" in message_content and '"' not in message_content[:50]:
+                        logger.error(
+                            "Possible issue: Single quotes instead of double quotes in JSON"
+                        )
+                    if message_content.count("{") != message_content.count("}"):
+                        logger.error("Possible issue: Mismatched braces")
+                    if message_content.count("[") != message_content.count("]"):
+                        logger.error("Possible issue: Mismatched brackets")
+                    error_count += 1
+                    continue
+
                 except Exception as e:
-                    logger.error(f"Error processing conversation data: {e}")
+                    logger.error(
+                        f"Unexpected error processing custom_id: {custom_id} at line {line_num}"
+                    )
+                    logger.error(f"Error: {e}")
+                    logger.error(
+                        f"Message content (first 300 chars): {message_content[:300]}..."
+                    )
+                    if "parsed_content" in locals():
+                        logger.error(f"Parsed content type: {type(parsed_content)}")
+                        logger.error(
+                            f"Parsed content (first 300 chars): {str(parsed_content)[:300]}..."
+                        )
+                    error_count += 1
+                    continue
+
+    # Log processing summary
+    logger.info(f"Processing complete. Success: {success_count}, Errors: {error_count}")
 
     # Convert each split's results into Hugging Face Datasets
     datasets_by_split = {}
     for split_name, results in split_results.items():
         if results:  # Only create dataset if there are results
-            split_dataset = Dataset.from_dict(
-                {
-                    "first_tag": [conv["first_tag"] for conv in results],
-                    "second_tag": [conv["second_tag"] for conv in results],
-                    "origin": [conv["origin"] for conv in results],
-                    "messages": [conv["messages"] for conv in results],
-                }
-            )
-            datasets_by_split[split_name] = split_dataset
-            logger.info(f"Split '{split_name}': {len(split_dataset)} samples")
+            logger.info(f"Validating and normalizing data for split '{split_name}'...")
+
+            # Validate and normalize all data
+            normalized_results = validate_and_normalize_data(results, split_name)
+
+            if not normalized_results:
+                logger.warning(
+                    f"No valid data after normalization for split '{split_name}'"
+                )
+                continue
+
+            # Extract data for dataset creation with additional type checking
+            try:
+                first_tags = [conv["first_tag"] for conv in normalized_results]
+                second_tags = [conv["second_tag"] for conv in normalized_results]
+                origins = [conv["origin"] for conv in normalized_results]
+                messages_list = [conv["messages"] for conv in normalized_results]
+
+                # Final type validation before dataset creation
+                logger.info(f"Final validation for split '{split_name}':")
+                logger.info(
+                    f"  first_tags: all lists? {all(isinstance(x, list) for x in first_tags)}"
+                )
+                logger.info(
+                    f"  second_tags: all lists? {all(isinstance(x, list) for x in second_tags)}"
+                )
+                logger.info(
+                    f"  origins: all dicts? {all(isinstance(x, dict) for x in origins)}"
+                )
+                logger.info(
+                    f"  messages: all lists? {all(isinstance(x, list) for x in messages_list)}"
+                )
+
+                # Check for any remaining None values that could cause issues
+                none_check_fields = [
+                    ("first_tags", first_tags),
+                    ("second_tags", second_tags),
+                    ("origins", origins),
+                    ("messages", messages_list),
+                ]
+
+                for field_name, field_data in none_check_fields:
+                    none_count = sum(1 for x in field_data if x is None)
+                    if none_count > 0:
+                        logger.warning(
+                            f"Found {none_count} None values in {field_name}"
+                        )
+
+                split_dataset = Dataset.from_dict(
+                    {
+                        "first_tag": first_tags,
+                        "second_tag": second_tags,
+                        "origin": origins,
+                        "messages": messages_list,
+                    }
+                )
+
+                datasets_by_split[split_name] = split_dataset
+                logger.info(
+                    f"Split '{split_name}': {len(split_dataset)} samples successfully created"
+                )
+
+            except Exception as e:
+                logger.error(f"Error creating dataset for split '{split_name}': {e}")
+                logger.error("Sample data types:")
+                if normalized_results:
+                    sample = normalized_results[0]
+                    for key, value in sample.items():
+                        logger.error(f"  {key}: {type(value)} = {str(value)[:100]}...")
+                continue
+
+    if not datasets_by_split:
+        logger.error("No valid datasets created. Check the input data format.")
+        return False
 
     # Create DatasetDict with preserved splits
     dataset_dict = DatasetDict(datasets_by_split)
@@ -340,14 +748,13 @@ def process_and_upload_data(output_file, dset, hf_token, original_split_dfs):
 
 def main():
     """
-    Main function to load the dataset, prepare the JSONL file,
+    Main function to load the dataset, prepare the JSONL files,
     make batch calls to the OpenAI API, process the results,
     and upload the final dataset to the Hugging Face Hub.
     """
     dataset = "chempile-reasoning"
     full_dset_name = f"jablonkagroup/{dataset}"
     # Load environment variables
-    load_dotenv("../.env")
     hf_token = os.getenv("HF_TOKEN")
 
     if not hf_token:
@@ -356,9 +763,21 @@ def main():
         )
 
     split_dfs = load_and_save_data(full_dset_name)
-    input_file = prepare_jsonl_file(split_dfs, dataset)
-    output_file = make_batch_call(input_file)
-    success = process_and_upload_data(output_file, dataset, hf_token, split_dfs)
+
+    # Prepare JSONL files (potentially multiple files)
+    input_files = prepare_jsonl_files(split_dfs, dataset)
+
+    # Submit batch jobs and wait for completion
+    completed_jobs = make_batch_calls(input_files)
+
+    # Concatenate all output files
+    combined_output_file = concatenate_output_files(completed_jobs, dataset)
+
+    # Process the combined output file
+    success = process_and_upload_data(
+        combined_output_file, dataset, hf_token, split_dfs
+    )
+
     if success:
         logger.info("Data processing and upload completed successfully.")
     else:
