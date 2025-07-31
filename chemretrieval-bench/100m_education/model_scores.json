@@ -1,0 +1,5 @@
+{
+  "model": "jablonkagroup/chempile-education-100m-ckpt-checkpoint-300",
+  "mean_ndcg_10": 0.0927,
+  "chememb_classification_accuracy": 0.5072
+}

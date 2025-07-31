@@ -1,0 +1,5 @@
+{
+  "model": "jablonkagroup/chempile-lift-100m-ckpt-checkpoint-100",
+  "mean_ndcg_10": 0.0695,
+  "chememb_classification_accuracy": 0.5072
+}
